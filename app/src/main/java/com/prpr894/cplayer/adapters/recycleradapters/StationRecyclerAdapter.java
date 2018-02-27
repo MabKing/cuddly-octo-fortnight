@@ -38,6 +38,7 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
         holder.mTextViewNum.setText(mList.get(position).getFjs());
         Picasso.with(mContext)
                 .load(mList.get(position).getImg())
+                .placeholder(R.drawable.ic_img_loading)
                 .into(holder.mImageViewIcon);
 
     }

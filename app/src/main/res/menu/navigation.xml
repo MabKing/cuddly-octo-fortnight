@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/g_1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/s_1"
+            android:icon="@drawable/ic_icon"
+            android:title="单选1"/>
+        <item
+            android:id="@+id/s_2"
+            android:icon="@drawable/ic_icon"
+            android:title="单选2"/>
+        <item
+            android:id="@+id/s_3"
+            android:icon="@mipmap/ic_launcher_round"
+            android:title="单选3"/>
+        <item
+            android:id="@+id/s_4"
+            android:icon="@drawable/ic_icon"
+            android:title="单选4"/>
+        <item
+            android:id="@+id/s_5"
+            android:icon="@drawable/ic_icon"
+            android:title="单选5"/>
+        <item
+            android:id="@+id/s_6"
+            android:icon="@mipmap/ic_launcher_round"
+            android:title="单选6"/>
+
+    </group>
+    <item android:title="子菜单">
+        <menu>
+            <item
+                android:id="@+id/m_1"
+                android:icon="@mipmap/ic_launcher"
+                android:title="点击Toast"/>
+            <item
+                android:id="@+id/m_2"
+                android:icon="@mipmap/ic_launcher_round"
+                android:title="跳转上传界面"/>
+            <item
+                android:id="@+id/m_3"
+                android:icon="@mipmap/ic_launcher"
+                android:title="关闭菜单"/>
+            <item
+                android:id="@+id/m_41"
+                android:icon="@mipmap/ic_launcher"
+                android:title="点击Toast"/>
+            <item
+                android:id="@+id/m_5"
+                android:icon="@mipmap/ic_launcher_round"
+                android:title="菜单2"/>
+            <item
+                android:id="@+id/m_6"
+                android:icon="@mipmap/ic_launcher"
+                android:title="关闭菜单"/>
+
+        </menu>
+    </item>
+    <group android:id="@+id/g_2">
+        <item
+            android:id="@+id/m_4"
+            android:icon="@drawable/ic_icon"
+            android:title="退出程序"/>
+    </group>
+
+
+</menu>

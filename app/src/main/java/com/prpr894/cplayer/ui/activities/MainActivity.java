@@ -1,15 +1,22 @@
 package com.prpr894.cplayer.ui.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -19,6 +26,7 @@ import com.prpr894.cplayer.adapters.recycleradapters.StationRecyclerAdapter;
 import com.prpr894.cplayer.base.BaseActivity;
 import com.prpr894.cplayer.bean.StationBean;
 import com.prpr894.cplayer.bean.StationListItemDataBean;
+import com.prpr894.cplayer.view.CustomDrawerLayout;
 
 import java.io.StringReader;
 import java.nio.charset.Charset;
@@ -32,25 +40,39 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private List<StationListItemDataBean> mList;
 
     private RecyclerView mRecyclerView;
     private StationRecyclerAdapter mAdapter;
 
+    private CustomDrawerLayout mCustomDrawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+//        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGray));
         setContentView(R.layout.activity_main);
         initView();
         initData();
     }
 
     private void initView() {
-        getToolbarTitle().setText("直播");
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
+        mCustomDrawerLayout = findViewById(R.id.drawer);
+        //注意此段顺序
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, mCustomDrawerLayout, toolbar, 0, 0);//不能挪走，应在上面两行的下面
+        mCustomDrawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+
+        NavigationView navigationView =  findViewById(R.id.navigation);
+        navigationView.setNavigationItemSelectedListener(this);
+        //开启彩色图标
+        navigationView.setItemIconTintList(null);
 
         mList = new ArrayList<>();
         mAdapter = new StationRecyclerAdapter(mList, this);
@@ -118,7 +140,24 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected boolean isShowBacking() {
-        return false;
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.m_1:
+                Toast.makeText(this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.m_2:
+//                Intent intent=new Intent(this,Upload1Activity.class);
+//                startActivity(intent);
+                mCustomDrawerLayout.closeDrawers();
+                break;
+            case R.id.m_3:
+                mCustomDrawerLayout.closeDrawers();
+                break;
+            case R.id.m_4:
+                ActivityCompat.finishAffinity(this);
+                break;
+
+        }
+        return true;
     }
 }
