@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity {
         mAdapter = new StationRecyclerAdapter(mList, this);
         mRecyclerView = findViewById(R.id.recycler_view_station_list);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 4));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 3));
     }
 
     private void initData() {
