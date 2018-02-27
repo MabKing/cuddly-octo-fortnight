@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#47C4FC</color>
+    <color name="colorPrimaryDark">#47C4FC</color>
+    <color name="colorAccent">#47C4FC</color>
+    <color name="back">#eff8ff</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#ffffff</color>
+    <color name="child_line">#b2b2b2</color>
+    <color name="gray">#666666</color>
+    <color name="button_blue_select">#40C0d0</color>
+    <color name="button_blue_normal">#47C4FC</color>
+    <color name="colorLinkText">#0000CC</color>
+    <color name="colorLoginBtn">#1365B9</color>
+    <color name="colorFailed">#d81e06</color>
+    <color name="transparent">#00000000</color>
+</resources>
