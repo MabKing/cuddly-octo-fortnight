@@ -6,55 +6,39 @@
         <item
             android:id="@+id/s_1"
             android:icon="@drawable/ic_icon"
-            android:title="单选1"/>
+            android:title="直播"/>
         <item
             android:id="@+id/s_2"
             android:icon="@drawable/ic_icon"
-            android:title="单选2"/>
+            android:title="本地视频"/>
         <item
             android:id="@+id/s_3"
             android:icon="@mipmap/ic_launcher_round"
-            android:title="单选3"/>
+            android:title="本地音频"/>
         <item
             android:id="@+id/s_4"
             android:icon="@drawable/ic_icon"
-            android:title="单选4"/>
+            android:title="音乐搜索"/>
         <item
             android:id="@+id/s_5"
             android:icon="@drawable/ic_icon"
-            android:title="单选5"/>
-        <item
-            android:id="@+id/s_6"
-            android:icon="@mipmap/ic_launcher_round"
-            android:title="单选6"/>
+            android:title="下载管理"/>
 
     </group>
-    <item android:title="子菜单">
+    <item android:title="菜单">
         <menu>
             <item
                 android:id="@+id/m_1"
                 android:icon="@mipmap/ic_launcher"
-                android:title="点击Toast"/>
+                android:title="设置"/>
             <item
                 android:id="@+id/m_2"
                 android:icon="@mipmap/ic_launcher_round"
-                android:title="跳转上传界面"/>
+                android:title="主题"/>
             <item
                 android:id="@+id/m_3"
                 android:icon="@mipmap/ic_launcher"
-                android:title="关闭菜单"/>
-            <item
-                android:id="@+id/m_41"
-                android:icon="@mipmap/ic_launcher"
-                android:title="点击Toast"/>
-            <item
-                android:id="@+id/m_5"
-                android:icon="@mipmap/ic_launcher_round"
-                android:title="菜单2"/>
-            <item
-                android:id="@+id/m_6"
-                android:icon="@mipmap/ic_launcher"
-                android:title="关闭菜单"/>
+                android:title="关于"/>
 
         </menu>
     </item>
