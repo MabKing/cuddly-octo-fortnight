@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.prpr894.cplayer.MyApp;
 import com.prpr894.cplayer.R;
 
 /**
@@ -19,7 +18,6 @@ public class BaseActivity extends AppCompatActivity implements BaseInterface {
     private TextView mToolbarTitle;
     private TextView mToolbarSubTitle;
     public ProgressDialog progressDialog;
-    private MyApp app;
 
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
@@ -39,7 +37,6 @@ public class BaseActivity extends AppCompatActivity implements BaseInterface {
             //设置默认的标题不显示
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
-        app = MyApp.getInstance();
     }
 
 

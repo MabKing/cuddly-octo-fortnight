@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.lzy.okgo.OkGo;
 
+import es.dmoral.toasty.MyToast;
+
 public class MyApp extends Application {
 
     public static MyApp instance;
@@ -12,6 +14,7 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        MyToast.init(this, false, false);
         OkGo.getInstance().init(this);
     }
 

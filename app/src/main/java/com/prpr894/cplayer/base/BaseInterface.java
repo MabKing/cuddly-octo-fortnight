@@ -3,15 +3,6 @@ package com.prpr894.cplayer.base;
 public interface BaseInterface {
 
 	/**
-	 * 显示toast
-	 * 
-	 * @param str
-	 */
-//	public void showToast(String str);
-
-	//	public void showToast(String stringId);
-
-	/**
 	 * 关闭activity
 	 */
 	public void finishUI();

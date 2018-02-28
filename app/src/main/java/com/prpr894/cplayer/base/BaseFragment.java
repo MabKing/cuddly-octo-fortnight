@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import java.util.Objects;
+
 /**
  * Created by dell on 2018/1/3 0003.
  */
@@ -45,7 +47,7 @@ public class BaseFragment extends Fragment implements BaseInterface {
 
     @Override
     public void finishUI() {
-        getActivity().finish();
+        Objects.requireNonNull(getActivity()).finish();
     }
 
     @Override

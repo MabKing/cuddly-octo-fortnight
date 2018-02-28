@@ -23,6 +23,8 @@ import com.prpr894.cplayer.view.CustomDrawerLayout;
 import java.util.HashMap;
 import java.util.Objects;
 
+import es.dmoral.toasty.MyToast;
+
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
@@ -105,16 +107,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.m_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.m_2:
+                Intent intentSettings = new Intent(this, SettingsActivity.class);
+                startActivity(intentSettings);
                 mCustomDrawerLayout.closeDrawers();
                 break;
-            case R.id.m_3:
+            case R.id.m_theme:
+                mCustomDrawerLayout.closeDrawers();
+                MyToast.info("暂未实现");
+                break;
+            case R.id.m_about:
+                Intent intentAbout = new Intent(this, AboutActivity.class);
+                startActivity(intentAbout);
                 mCustomDrawerLayout.closeDrawers();
                 break;
-            case R.id.m_4:
+            case R.id.m_exit_app:
                 ActivityCompat.finishAffinity(this);
                 break;
             case R.id.s_live:

@@ -32,11 +32,11 @@
                 android:icon="@mipmap/ic_launcher"
                 android:title="设置"/>
             <item
-                android:id="@+id/m_2"
+                android:id="@+id/m_theme"
                 android:icon="@mipmap/ic_launcher"
                 android:title="主题"/>
             <item
-                android:id="@+id/m_3"
+                android:id="@+id/m_about"
                 android:icon="@mipmap/ic_launcher"
                 android:title="关于"/>
 
@@ -44,7 +44,7 @@
     </item>
     <group android:id="@+id/g_2">
         <item
-            android:id="@+id/m_4"
+            android:id="@+id/m_exit_app"
             android:icon="@drawable/ic_icon"
             android:title="退出程序"/>
     </group>
