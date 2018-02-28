@@ -36,6 +36,7 @@ public class MainPlayerActivity extends AppCompatActivity {
         Picasso.with(this)
                 .load(imgUrl)
                 .into(JZVideoPlayerStandard.thumbImageView);
+        JZVideoPlayerStandard.startVideo();
     }
 
     @Override
