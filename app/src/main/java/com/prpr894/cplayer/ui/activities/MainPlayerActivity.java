@@ -1,19 +1,21 @@
 package com.prpr894.cplayer.ui.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.prpr894.cplayer.R;
+import com.prpr894.cplayer.base.BaseActivity;
 import com.prpr894.cplayer.custommediaplayer.JZMediaIjkplayer;
 import com.squareup.picasso.Picasso;
 
+import cn.jzvd.JZMediaSystem;
 import cn.jzvd.JZVideoPlayer;
 import cn.jzvd.JZVideoPlayerStandard;
 
-public class MainPlayerActivity extends AppCompatActivity {
+public class MainPlayerActivity extends BaseActivity {
     private String videoUrl = "";
     private String imgUrl = "";
     private String title = "";
+    private JZVideoPlayerStandard mJzVideoPlayerStandard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +32,14 @@ public class MainPlayerActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        getToolbarTitle().setText(title);
         JZVideoPlayer.setMediaInterface(new JZMediaIjkplayer());
-        JZVideoPlayerStandard JZVideoPlayerStandard = findViewById(R.id.video_player);
-        JZVideoPlayerStandard.setUp(videoUrl, JZVideoPlayer.SCREEN_WINDOW_NORMAL, title);
+        mJzVideoPlayerStandard = findViewById(R.id.video_player);
+        mJzVideoPlayerStandard.setUp(videoUrl, JZVideoPlayer.SCREEN_WINDOW_NORMAL, title);
         Picasso.with(this)
                 .load(imgUrl)
-                .into(JZVideoPlayerStandard.thumbImageView);
-        JZVideoPlayerStandard.startVideo();
+                .into(mJzVideoPlayerStandard.thumbImageView);
+        mJzVideoPlayerStandard.startVideo();
     }
 
     @Override
@@ -48,8 +51,19 @@ public class MainPlayerActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
+        JZVideoPlayer.releaseAllVideos();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         JZVideoPlayer.releaseAllVideos();
     }
 }
