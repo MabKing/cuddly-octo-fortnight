@@ -9,15 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.prpr894.cplayer.R;
+import com.prpr894.cplayer.bean.LiveRoomItemDataBean;
 import com.prpr894.cplayer.bean.StationListItemDataBean;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collection;
 import java.util.List;
 
-public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecyclerAdapter.ViewHolder> implements View.OnClickListener {
+public class RoomRecyclerAdapter extends RecyclerView.Adapter<RoomRecyclerAdapter.ViewHolder> implements View.OnClickListener {
 
-    private List<StationListItemDataBean> mList;
+    private List<LiveRoomItemDataBean> mList;
     private Context mContext;
     private RecyclerView mRecyclerView;
     private OnRecyclerItemClickListener mOnRecyclerItemClickListener;
@@ -26,14 +27,14 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
         mOnRecyclerItemClickListener = onRecyclerItemClickListener;
     }
 
-    public StationRecyclerAdapter(List<StationListItemDataBean> list, Context context) {
+    public RoomRecyclerAdapter(List<LiveRoomItemDataBean> list, Context context) {
         mList = list;
         mContext = context;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_station, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_room, parent, false);
         view.setOnClickListener(this);
         ViewHolder holder = new ViewHolder(view);
         return holder;
@@ -41,13 +42,11 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mTextViewStationName.setText(mList.get(position).getName());
-        holder.mTextViewNum.setText(mList.get(position).getFjs());
+        holder.mTextViewStationName.setText(mList.get(position).getNickname());
         Picasso.with(mContext)
-                .load(mList.get(position).getImg())
+                .load(mList.get(position).getLogourl())
                 .placeholder(R.drawable.ic_img_loading)
                 .into(holder.mImageViewIcon);
-
     }
 
     @Override
@@ -63,13 +62,13 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
     }
 
 
-    public void addAll(Collection<? extends StationListItemDataBean> collection) {
+    public void addAll(Collection<? extends LiveRoomItemDataBean> collection) {
         int size = mList.size();
         mList.addAll(collection);
         notifyItemRangeInserted(size, collection.size());
     }
 
-    public void remove(StationListItemDataBean data) {
+    public void remove(LiveRoomItemDataBean data) {
         int i = mList.indexOf(data);
         if (i >= 0) {
             remove(i);
@@ -103,17 +102,16 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView mImageViewIcon;
-        private TextView mTextViewStationName, mTextViewNum;
+        private TextView mTextViewStationName;
 
         ViewHolder(View itemView) {
             super(itemView);
             mImageViewIcon = itemView.findViewById(R.id.img_station_icon);
             mTextViewStationName = itemView.findViewById(R.id.tv_station_name);
-            mTextViewNum = itemView.findViewById(R.id.tv_station_num);
         }
     }
 
     public interface OnRecyclerItemClickListener {
-        void onRecyclerItemClick(RecyclerView recycler, View view, int position, long id, StationListItemDataBean data);
+        void onRecyclerItemClick(RecyclerView recycler, View view, int position, long id, LiveRoomItemDataBean data);
     }
 }

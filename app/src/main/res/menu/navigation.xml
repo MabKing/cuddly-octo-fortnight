@@ -12,15 +12,15 @@
             android:icon="@drawable/ic_icon"
             android:title="本地视频"/>
         <item
-            android:id="@+id/s_3"
+            android:id="@+id/s_local_music"
             android:icon="@mipmap/ic_launcher"
             android:title="本地音频"/>
         <item
-            android:id="@+id/s_4"
+            android:id="@+id/s_search_music"
             android:icon="@drawable/ic_icon"
             android:title="音乐搜索"/>
         <item
-            android:id="@+id/s_5"
+            android:id="@+id/s_download_manager"
             android:icon="@drawable/ic_icon"
             android:title="下载管理"/>
 

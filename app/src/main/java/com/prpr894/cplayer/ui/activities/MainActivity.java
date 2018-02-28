@@ -16,8 +16,11 @@ import android.view.View;
 
 import com.prpr894.cplayer.R;
 import com.prpr894.cplayer.base.BaseActivity;
+import com.prpr894.cplayer.ui.fragments.DownloadManagerFragment;
+import com.prpr894.cplayer.ui.fragments.LocalMusicFragment;
 import com.prpr894.cplayer.ui.fragments.LocalVideoFragment;
 import com.prpr894.cplayer.ui.fragments.MainPageLiveFragment;
+import com.prpr894.cplayer.ui.fragments.SearchMusicFragment;
 import com.prpr894.cplayer.view.CustomDrawerLayout;
 
 import java.util.HashMap;
@@ -83,6 +86,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             } else if (key == 1) {
                 mShowFrg = new LocalVideoFragment();
                 frgMap.put(key, mShowFrg);
+            } else if (key == 2) {
+                mShowFrg = new LocalMusicFragment();
+                frgMap.put(key, mShowFrg);
+            } else if (key == 3) {
+                mShowFrg = new SearchMusicFragment();
+                frgMap.put(key, mShowFrg);
+            } else if (key == 4) {
+                mShowFrg = new DownloadManagerFragment();
+                frgMap.put(key, mShowFrg);
             }
         }
         if (frgManage == null) {
@@ -124,17 +136,28 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 ActivityCompat.finishAffinity(this);
                 break;
             case R.id.s_live:
-                mToolbar.setTitle(item.getTitle().toString());
-                switchPage(0);
-                mCustomDrawerLayout.closeDrawers();
+                switchMainPage(item, 0);
                 break;
             case R.id.s_local_video:
-                mToolbar.setTitle(item.getTitle().toString());
-                switchPage(1);
-                mCustomDrawerLayout.closeDrawers();
+                switchMainPage(item, 1);
+                break;
+            case R.id.s_local_music:
+                switchMainPage(item, 2);
+                break;
+            case R.id.s_search_music:
+                switchMainPage(item, 3);
+                break;
+            case R.id.s_download_manager:
+                switchMainPage(item, 4);
                 break;
 
         }
         return true;
+    }
+
+    private void switchMainPage(@NonNull MenuItem item, int i) {
+        mToolbar.setTitle(item.getTitle().toString());
+        switchPage(i);
+        mCustomDrawerLayout.closeDrawers();
     }
 }

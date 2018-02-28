@@ -49,7 +49,8 @@
         <service android:name=".service.ListenNetStateService" />
 
         <activity android:name=".ui.activities.SettingsActivity" />
-        <activity android:name=".ui.activities.AboutActivity"></activity>
+        <activity android:name=".ui.activities.AboutActivity" />
+        <activity android:name=".ui.activities.LiveRoomListActivity"></activity>
     </application>
 
 </manifest>

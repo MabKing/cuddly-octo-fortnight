@@ -1,16 +1,28 @@
 package com.prpr894.cplayer.bean;
 
+import java.io.Serializable;
+
 /**
  * "name":"娴瓙",
  * "img":"http://i1.mobile-dad.com/uploads/apk_img/201801/556763_1_151703117360af.png",
  * "url":"/live/langzi.html",
  * "fjs":"127"
  */
-public class StationListItemDataBean {
+public class StationListItemDataBean implements Serializable {
     private String name;
     private String img;
     private String url;
     private String fjs;
+
+    @Override
+    public String toString() {
+        return "StationListItemDataBean{" +
+                "name='" + name + '\'' +
+                ", img='" + img + '\'' +
+                ", url='" + url + '\'' +
+                ", fjs='" + fjs + '\'' +
+                '}';
+    }
 
     public String getName() {
         return name;

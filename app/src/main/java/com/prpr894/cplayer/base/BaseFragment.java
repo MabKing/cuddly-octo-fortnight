@@ -42,7 +42,7 @@ public class BaseFragment extends Fragment implements BaseInterface {
     @Override
     public void hideProgress() {
         if (progressDialog != null && progressDialog.isShowing())
-            progressDialog.hide();
+            progressDialog.dismiss();
     }
 
     @Override
