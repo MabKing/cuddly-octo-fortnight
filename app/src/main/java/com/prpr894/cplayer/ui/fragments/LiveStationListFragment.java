@@ -120,17 +120,14 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
                                     mList.clear();
                                     mAdapter.removeAll();
                                     mAdapter.addAll(data);
-                                    hideProgress();
-                                    mSmartRefreshLayout.finishRefresh();
                                 }
                             });
-                        } else {
-                            hideProgress();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        hideProgress();
                     }
+                    mSmartRefreshLayout.finishRefresh();
+                    hideProgress();
                 } else {//base为空
                     Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
@@ -141,6 +138,7 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
                 }
             }
         }).start();
+        mSmartRefreshLayout.finishRefresh();
         hideProgress();
     }
 

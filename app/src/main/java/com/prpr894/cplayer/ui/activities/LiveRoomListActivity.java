@@ -21,6 +21,8 @@ import com.prpr894.cplayer.bean.LiveRoomListBean;
 import com.prpr894.cplayer.bean.StationListItemDataBean;
 import com.prpr894.cplayer.utils.SPUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +35,7 @@ import es.dmoral.toasty.MyToast;
 
 import static com.prpr894.cplayer.utils.AppConfig.PLAY_TYPE_BAI_DU;
 
-public class LiveRoomListActivity extends BaseActivity implements RoomRecyclerAdapter.OnRecyclerItemClickListener {
+public class LiveRoomListActivity extends BaseActivity implements RoomRecyclerAdapter.OnRecyclerItemClickListener, OnRefreshListener {
     private StationListItemDataBean data;
     private List<LiveRoomItemDataBean> mList;
     private RecyclerView mRecyclerView;
@@ -66,19 +68,23 @@ public class LiveRoomListActivity extends BaseActivity implements RoomRecyclerAd
 //                    }
 //                });
 
-        showProgress("加载中...", false);
+        if (!isRefresh) {
+            showProgress("加载中...", false);
+        }
+
         String baseUrl;
-        if (SPUtil.getBoolen(MyApp.getInstance(),"useServerBase",true)) {
-            baseUrl=SPUtil.getString(MyApp.getInstance(),"baseUrlFromServer","http://ww.jiafangmao.com/6");
-        }else {
-            baseUrl="http://ww.jiafangmao.com/6";
+        if (SPUtil.getBoolen(MyApp.getInstance(), "useServerBase", true)) {
+            baseUrl = SPUtil.getString(MyApp.getInstance(), "baseUrlFromServer", "http://ww.jiafangmao.com/6");
+        } else {
+            baseUrl = "http://ww.jiafangmao.com/6";
         }
         OkGo.<String>get(baseUrl + data.getUrl())
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        hideProgress();
                         Log.d("flag", "返回的房间列表： " + response.body());
+                        hideProgress();
+                        mSmartRefreshLayout.finishRefresh();
                         try {
                             JSONObject object = new JSONObject(response.body());
                             if (object.has("data")) {
@@ -99,19 +105,28 @@ public class LiveRoomListActivity extends BaseActivity implements RoomRecyclerAd
                         super.onError(response);
                         MyToast.error("网络连接异常！");
                         hideProgress();
+                        mSmartRefreshLayout.finishRefresh();
                     }
                 });
     }
 
     private void initView() {
+        isRefresh = false;
         getToolbarTitle().setText(data.getName());
         Log.d("flag", data.toString());
+
+        mSmartRefreshLayout = findViewById(R.id.sm_live_room_list);
+        mSmartRefreshLayout.setEnableLoadMore(false);
+        mSmartRefreshLayout.setOnRefreshListener(this);
+
         mList = new ArrayList<>();
         mAdapter = new RoomRecyclerAdapter(mList, this);
         mAdapter.setOnRecyclerItemClickListener(this);
         mRecyclerView = findViewById(R.id.recycler_view_room_list);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+
     }
 
     private void initBundle() {
@@ -132,5 +147,11 @@ public class LiveRoomListActivity extends BaseActivity implements RoomRecyclerAd
         bundle.putString("title", data.getNickname());
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshLayout) {
+        isRefresh = true;
+        initData();
     }
 }
