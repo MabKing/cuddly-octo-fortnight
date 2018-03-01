@@ -123,6 +123,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(intentSettings);
                 mCustomDrawerLayout.closeDrawers();
                 break;
+            case R.id.m_change_base:
+                Intent intentChangeBase = new Intent(this, ChangeBaseUrlActivity.class);
+                startActivity(intentChangeBase);
+                mCustomDrawerLayout.closeDrawers();
+                break;
             case R.id.m_theme:
                 mCustomDrawerLayout.closeDrawers();
                 MyToast.info("暂未实现");

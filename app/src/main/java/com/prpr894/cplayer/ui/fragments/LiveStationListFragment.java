@@ -1,8 +1,12 @@
 package com.prpr894.cplayer.ui.fragments;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,14 +18,15 @@ import android.view.ViewGroup;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.lzy.okgo.utils.IOUtils;
+import com.prpr894.cplayer.MyApp;
 import com.prpr894.cplayer.R;
 import com.prpr894.cplayer.adapters.recycleradapters.StationRecyclerAdapter;
 import com.prpr894.cplayer.base.BaseFragment;
 import com.prpr894.cplayer.bean.StationBean;
 import com.prpr894.cplayer.bean.StationListItemDataBean;
+import com.prpr894.cplayer.ui.activities.ChangeBaseUrlActivity;
 import com.prpr894.cplayer.ui.activities.LiveRoomListActivity;
-import com.prpr894.cplayer.ui.activities.MainActivity;
-import com.prpr894.cplayer.ui.activities.MainPlayerActivity;
+import com.prpr894.cplayer.utils.SPUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -89,8 +94,9 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
                 String url = "http://ww.jiafangmao.com/jk.txt";
                 String base = getStringFromNet(url);
                 if (!base.equals("")) {
-//                    String jsonListData = getStringFromNet(base + "/xyjk.html");
-                    String jsonListData = getStringFromNet("http://ww.jiafangmao.com/6/xyjk.html");
+                    SPUtil.putString(MyApp.getInstance(), "baseUrlFromServer", base);
+                    String jsonListData = getStringFromNet(base + "/xyjk.html");
+//                    String jsonListData = getStringFromNet("http://ww.jiafangmao.com/6/xyjk.html");
                     Log.d("flag", "获取的json数据： \n" + jsonListData);
                     String jsonListDataFormated;
                     if (jsonListData.contains(",]")) {
@@ -118,16 +124,52 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
                                     mSmartRefreshLayout.finishRefresh();
                                 }
                             });
-                        }else {
+                        } else {
                             hideProgress();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                         hideProgress();
                     }
+                } else {//base为空
+                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showDialogNullBase();
+                        }
+                    });
                 }
             }
         }).start();
+        hideProgress();
+    }
+
+    private void showDialogNullBase() {
+        AlertDialog.Builder builder;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(getContext());
+        }
+        builder.setTitle("提示");
+        builder.setMessage("获取服务器地址失败。是否尝试本地源服务器地址？");
+        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getContext(), ChangeBaseUrlActivity.class);
+                LiveStationListFragment.this.startActivityForResult(intent, 1);
+                dialog.dismiss();
+            }
+        });
+
+        builder.create().show();
+
     }
 
     private String getStringFromNet(String url) {
@@ -171,5 +213,11 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
         bundle.putSerializable("data", data);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }
