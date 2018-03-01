@@ -1,6 +1,8 @@
 package com.prpr894.cplayer.ui.activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,13 +16,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.prpr894.cplayer.MyApp;
 import com.prpr894.cplayer.R;
 import com.prpr894.cplayer.base.BaseActivity;
 import com.prpr894.cplayer.ui.fragments.DownloadManagerFragment;
+import com.prpr894.cplayer.ui.fragments.LiveStationListFragment;
 import com.prpr894.cplayer.ui.fragments.LocalMusicFragment;
 import com.prpr894.cplayer.ui.fragments.LocalVideoFragment;
 import com.prpr894.cplayer.ui.fragments.MainPageLiveFragment;
 import com.prpr894.cplayer.ui.fragments.SearchMusicFragment;
+import com.prpr894.cplayer.utils.SPUtil;
 import com.prpr894.cplayer.view.CustomDrawerLayout;
 
 import java.util.HashMap;
@@ -164,5 +169,54 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mToolbar.setTitle(item.getTitle().toString());
         switchPage(i);
         mCustomDrawerLayout.closeDrawers();
+    }
+
+    private long isExitTime = 0;
+
+    @Override
+    public void onBackPressed() {
+        if (SPUtil.getBoolen(MyApp.getInstance(), "exitNotification", true)) {
+            showDialogExit();
+        } else {
+            if (System.currentTimeMillis() - isExitTime >= 2000) {
+                MyToast.warn("再次点击退出程序");
+                isExitTime = System.currentTimeMillis();
+            } else {
+                ActivityCompat.finishAffinity(MainActivity.this);
+            }
+        }
+    }
+
+    private void showDialogExit() {
+        AlertDialog.Builder builder;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
+        }
+        builder.setTitle("提示");
+        builder.setMessage("确定退出程序吗？");
+        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                ActivityCompat.finishAffinity(MainActivity.this);
+            }
+        });
+        builder.setNeutralButton("不再提示", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SPUtil.putBoolen(MyApp.getInstance(), "exitNotification", false);
+            }
+        });
+
+        builder.create().show();
+
     }
 }

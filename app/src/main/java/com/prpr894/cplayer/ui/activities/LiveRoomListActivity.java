@@ -67,8 +67,13 @@ public class LiveRoomListActivity extends BaseActivity implements RoomRecyclerAd
 //                });
 
         showProgress("加载中...", false);
-
-        OkGo.<String>get("http://ww.jiafangmao.com/6" + data.getUrl())
+        String baseUrl;
+        if (SPUtil.getBoolen(MyApp.getInstance(),"useServerBase",true)) {
+            baseUrl=SPUtil.getString(MyApp.getInstance(),"baseUrlFromServer","http://ww.jiafangmao.com/6");
+        }else {
+            baseUrl="http://ww.jiafangmao.com/6";
+        }
+        OkGo.<String>get(baseUrl + data.getUrl())
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
