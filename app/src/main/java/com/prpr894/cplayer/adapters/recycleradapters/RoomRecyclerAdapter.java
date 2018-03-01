@@ -1,6 +1,8 @@
 package com.prpr894.cplayer.adapters.recycleradapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,13 +10,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baidu.cloud.videoplayer.demo.AdvancedPlayActivity;
+import com.prpr894.cplayer.MyApp;
 import com.prpr894.cplayer.R;
 import com.prpr894.cplayer.bean.LiveRoomItemDataBean;
 import com.prpr894.cplayer.bean.StationListItemDataBean;
+import com.prpr894.cplayer.ui.activities.MainPlayerActivity;
+import com.prpr894.cplayer.utils.CollectionHelper;
+import com.prpr894.cplayer.utils.SPUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collection;
 import java.util.List;
+
+import static com.prpr894.cplayer.utils.AppConfig.PLAY_TYPE_BAI_DU;
 
 public class RoomRecyclerAdapter extends RecyclerView.Adapter<RoomRecyclerAdapter.ViewHolder> implements View.OnClickListener {
 
@@ -42,11 +51,28 @@ public class RoomRecyclerAdapter extends RecyclerView.Adapter<RoomRecyclerAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        CollectionHelper collectionHelper = new CollectionHelper(holder.mImageViewCollection, mList.get(position));
+        collectionHelper.checkState(holder.mImageViewCollection);
+        holder.mImageViewCollection.setTag(collectionHelper);
         holder.mTextViewStationName.setText(mList.get(position).getNickname());
         Picasso.with(mContext)
                 .load(mList.get(position).getLogourl())
                 .placeholder(R.drawable.ic_img_loading)
                 .into(holder.mImageViewIcon);
+    }
+
+
+    public void checkCollectionState() {
+        if (mList != null) {
+            for (int i = 0; i < mList.size(); i++) {
+                View child = mRecyclerView.getChildAt(i);
+                if (child != null) {
+                    ViewHolder childViewHolder = (ViewHolder) mRecyclerView.getChildViewHolder(child);
+                    CollectionHelper helper = (CollectionHelper) childViewHolder.mImageViewCollection.getTag();
+                    helper.checkState(childViewHolder.mImageViewCollection);
+                }
+            }
+        }
     }
 
     @Override
@@ -66,6 +92,7 @@ public class RoomRecyclerAdapter extends RecyclerView.Adapter<RoomRecyclerAdapte
         int size = mList.size();
         mList.addAll(collection);
         notifyItemRangeInserted(size, collection.size());
+        checkCollectionState();
     }
 
     public void remove(LiveRoomItemDataBean data) {
@@ -100,14 +127,31 @@ public class RoomRecyclerAdapter extends RecyclerView.Adapter<RoomRecyclerAdapte
         }
     }
 
+    public void playNow(LiveRoomItemDataBean data) {
+        Intent intent;
+        if (SPUtil.getString(MyApp.getInstance(), "playType", PLAY_TYPE_BAI_DU).equals(PLAY_TYPE_BAI_DU)) {
+            intent = new Intent(mContext, AdvancedPlayActivity.class);
+        } else {
+            intent = new Intent(mContext, MainPlayerActivity.class);
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("videoUrl", data.getPlay_url());
+        bundle.putString("imgUrl", data.getLogourl());
+        bundle.putString("title", data.getNickname());
+        bundle.putString("id", data.getUserid());
+        intent.putExtras(bundle);
+        mContext.startActivity(intent);
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView mImageViewIcon;
+        private ImageView mImageViewIcon, mImageViewCollection;
         private TextView mTextViewStationName;
 
         ViewHolder(View itemView) {
             super(itemView);
-            mImageViewIcon = itemView.findViewById(R.id.img_station_icon);
-            mTextViewStationName = itemView.findViewById(R.id.tv_station_name);
+            mImageViewIcon = itemView.findViewById(R.id.img_room_icon);
+            mImageViewCollection = itemView.findViewById(R.id.img_room_collection);
+            mTextViewStationName = itemView.findViewById(R.id.tv_room_name);
         }
     }
 

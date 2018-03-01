@@ -135,24 +135,18 @@ public class LiveRoomListActivity extends BaseActivity implements RoomRecyclerAd
 
     @Override
     public void onRecyclerItemClick(RecyclerView recycler, View view, int position, long id, LiveRoomItemDataBean data) {
-        Intent intent;
-        if (SPUtil.getString(MyApp.getInstance(), "payType", PLAY_TYPE_BAI_DU).equals(PLAY_TYPE_BAI_DU)) {
-            intent = new Intent(this, AdvancedPlayActivity.class);
-        } else {
-            intent = new Intent(this, MainPlayerActivity.class);
-        }
-        Bundle bundle = new Bundle();
-        bundle.putString("videoUrl", data.getPlay_url());
-        bundle.putString("imgUrl", data.getLogourl());
-        bundle.putString("title", data.getNickname());
-        bundle.putString("id", data.getUserid());
-        intent.putExtras(bundle);
-        startActivity(intent);
+        mAdapter.playNow(data);
     }
 
     @Override
     public void onRefresh(RefreshLayout refreshLayout) {
         isRefresh = true;
         initData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdapter.checkCollectionState();
     }
 }
