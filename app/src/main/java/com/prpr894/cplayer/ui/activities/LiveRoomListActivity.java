@@ -7,13 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.baidu.cloud.videoplayer.demo.AdvancedPlayActivity;
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.prpr894.cplayer.R;
 import com.prpr894.cplayer.adapters.recycleradapters.RoomRecyclerAdapter;
-import com.prpr894.cplayer.adapters.recycleradapters.StationRecyclerAdapter;
 import com.prpr894.cplayer.base.BaseActivity;
 import com.prpr894.cplayer.bean.LiveRoomItemDataBean;
 import com.prpr894.cplayer.bean.LiveRoomListBean;
@@ -86,13 +86,9 @@ public class LiveRoomListActivity extends BaseActivity implements RoomRecyclerAd
 
     @Override
     public void onRecyclerItemClick(RecyclerView recycler, View view, int position, long id, LiveRoomItemDataBean data) {
-        Intent intent = new Intent(this, MainPlayerActivity.class);
+//        Intent intent = new Intent(this, MainPlayerActivity.class);
+        Intent intent = new Intent(this, AdvancedPlayActivity.class);
         Bundle bundle = new Bundle();
-        /*
-         *  videoUrl = getIntent().getStringExtra("videoUrl");
-         *  imgUrl = getIntent().getStringExtra("imgUrl");
-         *  title = getIntent().getStringExtra("title");
-         * */
         bundle.putString("videoUrl", data.getPlay_url());
         bundle.putString("imgUrl", data.getLogourl());
         bundle.putString("title", data.getNickname());
