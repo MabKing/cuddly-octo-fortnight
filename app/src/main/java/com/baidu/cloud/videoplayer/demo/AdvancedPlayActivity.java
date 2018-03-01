@@ -16,12 +16,13 @@ import android.widget.TextView;
 import com.baidu.cloud.media.player.IMediaPlayer;
 import com.baidu.cloud.videoplayer.demo.bar.AdvancedMediaController;
 import com.baidu.cloud.videoplayer.demo.info.SharedPrefsStore;
-import com.baidu.cloud.videoplayer.demo.info.VideoInfo;
 import com.baidu.cloud.videoplayer.demo.popview.FullScreenUtils;
 import com.baidu.cloud.videoplayer.widget.BDCloudVideoView;
 import com.baidu.cloud.videoplayer.widget.BDCloudVideoView.PlayerState;
 import com.prpr894.cplayer.R;
 import com.prpr894.cplayer.base.BaseActivity;
+import com.prpr894.cplayer.bean.LiveRoomItemDataBean;
+import com.prpr894.cplayer.utils.CollectionHelper;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,7 +51,8 @@ public class AdvancedPlayActivity extends BaseActivity implements IMediaPlayer.O
 
     private Timer barTimer;
     private volatile boolean isFullScreen = false;
-    private VideoInfo mVideoInfo;
+    private LiveRoomItemDataBean mLiveRoomItemDataBean;
+    private CollectionHelper mCollectionHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,6 @@ public class AdvancedPlayActivity extends BaseActivity implements IMediaPlayer.O
          * 防闪屏
          */
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
-
         setContentView(R.layout.activity_advanced_video_playing);
         initBundle();
         initUI();
@@ -77,9 +78,11 @@ public class AdvancedPlayActivity extends BaseActivity implements IMediaPlayer.O
     }
 
     private void initBundle() {
-        mVideoInfo = new VideoInfo(getIntent().getStringExtra("title"), getIntent().getStringExtra("videoUrl"));
-        mVideoInfo.setCanDelete(false);
-        mVideoInfo.setImageUrl(getIntent().getStringExtra("imgUrl"));
+        mLiveRoomItemDataBean = new LiveRoomItemDataBean();
+        mLiveRoomItemDataBean.setLogourl(getIntent().getStringExtra("imgUrl"));
+        mLiveRoomItemDataBean.setNickname(getIntent().getStringExtra("title"));
+        mLiveRoomItemDataBean.setPlay_url(getIntent().getStringExtra("videoUrl"));
+        mLiveRoomItemDataBean.setUserid(getIntent().getStringExtra("id"));
     }
 
     /**
@@ -119,8 +122,8 @@ public class AdvancedPlayActivity extends BaseActivity implements IMediaPlayer.O
         rllp.addRule(RelativeLayout.CENTER_IN_PARENT);
         mViewHolder.addView(mVV, rllp);
         mediaController.setMediaPlayerControl(mVV);
-
-        mVV.setVideoPath(mVideoInfo.getUrl());
+        mCollectionHelper=new CollectionHelper(mediaController.getCollectionView(),mLiveRoomItemDataBean);
+        mVV.setVideoPath(mLiveRoomItemDataBean.getPlay_url());
         mVV.setLogEnabled(false);
 //        mVV.setDecodeMode(BDCloudMediaPlayer.DECODE_SW);
 
@@ -159,7 +162,7 @@ public class AdvancedPlayActivity extends BaseActivity implements IMediaPlayer.O
 
         });
         TextView tvTitle = this.findViewById(R.id.tv_top_title);
-        tvTitle.setText(mVideoInfo.getTitle());
+        tvTitle.setText(mLiveRoomItemDataBean.getNickname());
         final ImageButton ibScreen = this.findViewById(R.id.ibtn_screen_control);
         ibScreen.setOnClickListener(new OnClickListener() {
 

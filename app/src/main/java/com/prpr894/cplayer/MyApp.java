@@ -11,7 +11,7 @@ import es.dmoral.toasty.MyToast;
 
 public class MyApp extends Application {
 
-    public static MyApp instance;
+    private static MyApp instance;
 
     private DaoMaster.DevOpenHelper mHelper;
     private SQLiteDatabase db;
@@ -24,7 +24,7 @@ public class MyApp extends Application {
         instance = this;
         MyToast.init(this, false, false);
         OkGo.getInstance().init(this);
-        //setDatabase();
+        setDatabase();
     }
 
     public static MyApp getInstance() {

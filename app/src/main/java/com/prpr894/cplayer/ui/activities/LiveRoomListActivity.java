@@ -145,6 +145,7 @@ public class LiveRoomListActivity extends BaseActivity implements RoomRecyclerAd
         bundle.putString("videoUrl", data.getPlay_url());
         bundle.putString("imgUrl", data.getLogourl());
         bundle.putString("title", data.getNickname());
+        bundle.putString("id", data.getUserid());
         intent.putExtras(bundle);
         startActivity(intent);
     }

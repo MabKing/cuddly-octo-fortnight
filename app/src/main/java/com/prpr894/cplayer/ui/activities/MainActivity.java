@@ -179,7 +179,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             showDialogExit();
         } else {
             if (System.currentTimeMillis() - isExitTime >= 2000) {
-                MyToast.warn("再次点击退出程序");
+                MyToast.info("再次点击退出程序");
                 isExitTime = System.currentTimeMillis();
             } else {
                 ActivityCompat.finishAffinity(MainActivity.this);

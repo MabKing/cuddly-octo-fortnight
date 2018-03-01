@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class AdvancedMediaController extends RelativeLayout implements OnClickLi
     private ImageButton playButton;
     private ImageButton snapshotButton;
     private Button fitButton;
+    private ImageView collectionView;
     private TextView infoResolutionView;
     // private TextView infoBitrateView;
     private TextView infoNetworkView;
@@ -68,19 +70,23 @@ public class AdvancedMediaController extends RelativeLayout implements OnClickLi
         initUI();
     }
 
+    public ImageView getCollectionView() {
+        return collectionView;
+    }
+
     private void initUI() {
 
         // inflate controller bar
         LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         View layout = Objects.requireNonNull(inflater).inflate(R.layout.bar_advanced_media_controller, this);
-
-        playButton =  layout.findViewById(R.id.ibtn_play);
+        collectionView = layout.findViewById(R.id.img_collection);
+        playButton = layout.findViewById(R.id.ibtn_play);
         playButton.setOnClickListener(this);
 
-        snapshotButton =  layout.findViewById(R.id.ibtn_snapshot);
+        snapshotButton = layout.findViewById(R.id.ibtn_snapshot);
         snapshotButton.setOnClickListener(this);
 
-        fitButton =  layout.findViewById(R.id.btn_fitmode);
+        fitButton = layout.findViewById(R.id.btn_fitmode);
         if (SharedPrefsStore.isPlayerFitModeCrapping(this.getContext())) {
             fitButton.setText("裁剪");
         } else {
