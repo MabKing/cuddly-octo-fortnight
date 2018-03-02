@@ -3,6 +3,7 @@ package com.prpr894.cplayer.adapters.recycleradapters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -130,6 +131,18 @@ public class RoomRecyclerAdapter extends RecyclerView.Adapter<RoomRecyclerAdapte
     }
 
     public void playNow(LiveRoomItemDataBean data) {
+        Intent intent = initIntent();
+        Bundle bundle = new Bundle();
+        bundle.putString("videoUrl", data.getPlay_url());
+        bundle.putString("imgUrl", data.getLogourl());
+        bundle.putString("title", data.getNickname());
+        bundle.putString("id", data.getUserid());
+        intent.putExtras(bundle);
+        mContext.startActivity(intent);
+    }
+
+    @NonNull
+    private Intent initIntent() {
         Intent intent;
         switch (SPUtil.getString(MyApp.getInstance(), PLAY_TYPE, PLAY_TYPE_BAI_DU)) {
             case PLAY_TYPE_BAI_DU:
@@ -142,13 +155,7 @@ public class RoomRecyclerAdapter extends RecyclerView.Adapter<RoomRecyclerAdapte
                 intent = new Intent(mContext, AdvancedPlayActivity.class);
                 break;
         }
-        Bundle bundle = new Bundle();
-        bundle.putString("videoUrl", data.getPlay_url());
-        bundle.putString("imgUrl", data.getLogourl());
-        bundle.putString("title", data.getNickname());
-        bundle.putString("id", data.getUserid());
-        intent.putExtras(bundle);
-        mContext.startActivity(intent);
+        return intent;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

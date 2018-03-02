@@ -32,6 +32,13 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
         mRadioButtonBaiduPlayer = findViewById(R.id.rb_baidu_player);
         mRadioButtonJiaoZiPlayer = findViewById(R.id.rb_jiaozi_player);
         mCheckBoxExitDialog = findViewById(R.id.cb_show_exit_dialog);
+        mRadioButtonBaiduPlayer.setOnCheckedChangeListener(this);
+        mRadioButtonJiaoZiPlayer.setOnCheckedChangeListener(this);
+        mCheckBoxExitDialog.setOnCheckedChangeListener(this);
+        initSettings();
+    }
+
+    private void initSettings() {
         if (SPUtil.getBoolen(MyApp.getInstance(), EXIT_NOTIFICATION_DIALOG, true)) {
             mCheckBoxExitDialog.setChecked(true);
         } else {
@@ -45,9 +52,6 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
                 mRadioButtonJiaoZiPlayer.setChecked(true);
                 break;
         }
-        mRadioButtonBaiduPlayer.setOnCheckedChangeListener(this);
-        mRadioButtonJiaoZiPlayer.setOnCheckedChangeListener(this);
-        mCheckBoxExitDialog.setOnCheckedChangeListener(this);
     }
 
     @Override
