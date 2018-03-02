@@ -203,7 +203,11 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
         builder.setCancelable(false);
         builder.setTitle("恢复备份");
         builder.setIcon(R.drawable.ic_backup);
-        builder.setMessage("提示：点击条目然后选择恢复或删除。");
+        if (mCollectionBackupBean.getData() == null || mCollectionBackupBean.getData().size() <= 0) {
+            builder.setMessage("提示：暂无备份。");
+        } else {
+            builder.setMessage("提示：点击条目然后选择恢复或删除。");
+        }
         View view = LayoutInflater.from(this).inflate(R.layout.dialogl_collection_read, null, false);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_read_collection);
         final List<CollectionBackupItemDataBean> list = mCollectionBackupBean.getData();
@@ -235,6 +239,45 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
             }
         });
 
+        builder.setNeutralButton("清空备份", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogPa, int which) {
+                if (mCollectionBackupBean.getData() == null || mCollectionBackupBean.getData().size() <= 0) {
+                    MyToast.errorBig("当前没有备份！");
+                    return;
+                }
+                AlertDialog.Builder builder;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    builder = new AlertDialog.Builder(SettingsActivity.this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(SettingsActivity.this);
+                }
+                builder.setCancelable(false);
+                builder.setTitle("警告");
+                builder.setMessage("清空数据不可恢复，确定清空收藏吗？");
+                builder.setPositiveButton("清空", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        if (file.delete()) {
+                            mCollectionBackupBean.getData().clear();
+                            MyToast.successBig("清除成功");
+                        } else {
+                            MyToast.errorBig("清除失败");
+                        }
+                    }
+                });
+
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.create().show();
+            }
+        });
         builder.create().show();
 
     }
