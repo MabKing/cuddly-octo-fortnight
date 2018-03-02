@@ -23,7 +23,9 @@ import com.squareup.picasso.Picasso;
 import java.util.Collection;
 import java.util.List;
 
+import static com.prpr894.cplayer.utils.AppConfig.PLAY_TYPE;
 import static com.prpr894.cplayer.utils.AppConfig.PLAY_TYPE_BAI_DU;
+import static com.prpr894.cplayer.utils.AppConfig.PLAY_TYPE_SAO_ZI;
 
 public class RoomRecyclerAdapter extends RecyclerView.Adapter<RoomRecyclerAdapter.ViewHolder> implements View.OnClickListener {
 
@@ -129,10 +131,16 @@ public class RoomRecyclerAdapter extends RecyclerView.Adapter<RoomRecyclerAdapte
 
     public void playNow(LiveRoomItemDataBean data) {
         Intent intent;
-        if (SPUtil.getString(MyApp.getInstance(), "playType", PLAY_TYPE_BAI_DU).equals(PLAY_TYPE_BAI_DU)) {
-            intent = new Intent(mContext, AdvancedPlayActivity.class);
-        } else {
-            intent = new Intent(mContext, MainPlayerActivity.class);
+        switch (SPUtil.getString(MyApp.getInstance(), PLAY_TYPE, PLAY_TYPE_BAI_DU)) {
+            case PLAY_TYPE_BAI_DU:
+                intent = new Intent(mContext, AdvancedPlayActivity.class);
+                break;
+            case PLAY_TYPE_SAO_ZI:
+                intent = new Intent(mContext, MainPlayerActivity.class);
+                break;
+            default:
+                intent = new Intent(mContext, AdvancedPlayActivity.class);
+                break;
         }
         Bundle bundle = new Bundle();
         bundle.putString("videoUrl", data.getPlay_url());

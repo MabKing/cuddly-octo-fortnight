@@ -33,6 +33,8 @@ import java.util.Objects;
 
 import es.dmoral.toasty.MyToast;
 
+import static com.prpr894.cplayer.utils.AppConfig.EXIT_NOTIFICATION_DIALOG;
+
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
@@ -175,7 +177,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onBackPressed() {
-        if (SPUtil.getBoolen(MyApp.getInstance(), "exitNotification", true)) {
+        if (SPUtil.getBoolen(MyApp.getInstance(), EXIT_NOTIFICATION_DIALOG, true)) {
             showDialogExit();
         } else {
             if (System.currentTimeMillis() - isExitTime >= 2000) {
@@ -212,7 +214,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         builder.setNeutralButton("不再提示", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SPUtil.putBoolen(MyApp.getInstance(), "exitNotification", false);
+                SPUtil.putBoolen(MyApp.getInstance(), EXIT_NOTIFICATION_DIALOG, false);
             }
         });
 
