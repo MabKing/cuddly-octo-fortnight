@@ -2,9 +2,17 @@ package com.prpr894.cplayer.bean;
 
 import java.util.List;
 
-public class CollectionBackupBean {
+public class CollectionBackupItemDataBean {
     private String backupDate;
-    private List<LiveRoomListBean> data;
+    private List<LiveRoomItemDataBean> data;
+
+    public List<LiveRoomItemDataBean> getData() {
+        return data;
+    }
+
+    public void setData(List<LiveRoomItemDataBean> data) {
+        this.data = data;
+    }
 
     public String getBackupDate() {
         return backupDate;
@@ -14,11 +22,5 @@ public class CollectionBackupBean {
         this.backupDate = backupDate;
     }
 
-    public List<LiveRoomListBean> getData() {
-        return data;
-    }
 
-    public void setData(List<LiveRoomListBean> data) {
-        this.data = data;
-    }
 }

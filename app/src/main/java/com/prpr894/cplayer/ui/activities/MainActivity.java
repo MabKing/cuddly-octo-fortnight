@@ -230,10 +230,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 ActivityCompat.finishAffinity(MainActivity.this);
             }
         });
-        builder.setNeutralButton("不再提示", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("退出并不再提示", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 SPUtil.putBoolen(MyApp.getInstance(), EXIT_NOTIFICATION_DIALOG, false);
+                ActivityCompat.finishAffinity(MainActivity.this);
             }
         });
 

@@ -164,7 +164,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tv_collection_backup"
+                            android:id="@+id/tv_collection_backup_save"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -181,7 +181,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tv_del_collection_backup"
+                            android:id="@+id/tv_collection_backup_read"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
