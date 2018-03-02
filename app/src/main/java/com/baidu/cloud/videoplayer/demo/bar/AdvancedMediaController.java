@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -46,7 +47,6 @@ public class AdvancedMediaController extends RelativeLayout implements OnClickLi
     private Button fitButton;
     private ImageView collectionView;
     private TextView infoResolutionView;
-    // private TextView infoBitrateView;
     private TextView infoNetworkView;
 
 
@@ -251,12 +251,13 @@ public class AdvancedMediaController extends RelativeLayout implements OnClickLi
                 String strpath = null;
                 Bitmap bitmap = null;
                 Date date = new Date();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSSS");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSSS", Locale.CHINA);
                 String time = formatter.format(date);
-
-                // TODO 您可以指定存储路径，以下逻辑是保存在sdcard根目录下
-                sdDir = Environment.getExternalStorageDirectory();
-                strpath = sdDir.toString() + "/" + time + ".jpg";
+                sdDir = new File(Environment.getExternalStorageDirectory() + "/CPlayer/Picture/ScreenShots/");
+                if (!sdDir.exists()) {
+                    sdDir.mkdirs();
+                }
+                strpath = sdDir.toString() + "/CPlayerScreenShots" + time + ".jpg";
                 Log.d(TAG, "snapshot save path=" + strpath);
 
                 bitmap = mVideoView.getBitmap();
@@ -279,7 +280,7 @@ public class AdvancedMediaController extends RelativeLayout implements OnClickLi
                         }
                     }
                     os = null;
-                    Toast.makeText(this.getContext(), "截图保存在sd卡根目录下, 文件名为" + strpath, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this.getContext(), "截图保存在 " + strpath, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this.getContext(), "抱歉，当前无法截图", Toast.LENGTH_SHORT).show();
                 }

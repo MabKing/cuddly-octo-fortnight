@@ -1,9 +1,12 @@
 package com.prpr894.cplayer.ui.activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -27,12 +31,16 @@ import com.prpr894.cplayer.ui.fragments.MainPageLiveFragment;
 import com.prpr894.cplayer.ui.fragments.SearchMusicFragment;
 import com.prpr894.cplayer.utils.SPUtil;
 import com.prpr894.cplayer.view.CustomDrawerLayout;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import es.dmoral.toasty.MyToast;
 
+import static com.prpr894.cplayer.utils.AppConfig.CODE_PERMISSION_SETTING;
 import static com.prpr894.cplayer.utils.AppConfig.EXIT_NOTIFICATION_DIALOG;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,6 +57,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 //        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGray));
         setContentView(R.layout.activity_main);
         initView();
+        //此处用来检查权限，判断运行系统SDK版本是否大于等于23（android6.0）
+        rxPermissions = new RxPermissions(this);
+        initReasionDialog();
+        initPermissionSettingDialog();
+        if (Build.VERSION.SDK_INT >= 23) {
+            checkPermissionNow();
+        }
     }
 
     private void initView() {
@@ -177,6 +192,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onBackPressed() {
+        if (mCustomDrawerLayout.isDrawerOpen(mNavigationView)) {
+            mCustomDrawerLayout.closeDrawers();
+            return;
+        }
         if (SPUtil.getBoolen(MyApp.getInstance(), EXIT_NOTIFICATION_DIALOG, true)) {
             showDialogExit();
         } else {
@@ -221,4 +240,114 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         builder.create().show();
 
     }
+
+
+    //运行时权限检查
+
+    RxPermissions rxPermissions;
+    private AlertDialog.Builder mBuilder;
+    private AlertDialog.Builder mBuilderSetting;
+    private AlertDialog mAlertDialog;
+    private AlertDialog mAlertDialogSettings;
+    private boolean settingsFlag = false;
+
+    @SuppressLint("CheckResult")
+    private void checkPermissionNow() {
+        rxPermissions
+                .requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(new io.reactivex.functions.Consumer<Permission>() {
+                    @Override
+                    public void accept(Permission permission) {
+                        if (permission.granted) {
+                            // 已经全部允许了,继续其他操作
+                        } else if (permission.shouldShowRequestPermissionRationale) {
+                            // 有拒绝的，也有没拒绝的，会走这里，直到全部允许
+
+                            // 展示对话框
+                            if (!mAlertDialog.isShowing()) {
+                                mAlertDialog.show();
+                            }
+                        } else {
+                            //拒绝了并且不再允许会走这里，需要去设置里更改
+                            //写个Dialog，是否跳转，是就跳，否就结束程序
+
+                            // 展示对话框
+                            if (!mAlertDialogSettings.isShowing()) {
+                                mAlertDialogSettings.show();
+                            }
+                        }
+
+                    }
+                });
+    }
+
+    private void initPermissionSettingDialog() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            mBuilderSetting = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+        } else {
+            mBuilderSetting = new AlertDialog.Builder(this);
+        }
+        mBuilderSetting.setTitle("需要权限");
+        mBuilderSetting.setMessage("跳转至设置更改权限");
+        mBuilderSetting.setIcon(R.mipmap.ic_launcher);
+        mBuilderSetting.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                //跳转至设置界面
+                Intent localIntent = new Intent();
+                localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+                startActivity(localIntent);
+                settingsFlag = true;
+            }
+        });
+        mBuilderSetting.setNegativeButton("退出", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                MyToast.error("未获取权限，退出程序");
+                ActivityCompat.finishAffinity(MainActivity.this);
+            }
+        });
+        mBuilderSetting.setCancelable(false);
+        mAlertDialogSettings = mBuilderSetting.create();
+    }
+
+    private void initReasionDialog() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            mBuilder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+        } else {
+            mBuilder = new AlertDialog.Builder(this);
+        }
+        mBuilder.setTitle("需要权限");
+        mBuilder.setMessage("截图等功能需要内存卡读写权限以正常运行");
+        mBuilder.setIcon(R.mipmap.ic_launcher);
+        mBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                checkPermissionNow();
+            }
+        });
+        mBuilder.setNegativeButton("退出", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                MyToast.error("未获取权限，退出程序");
+                ActivityCompat.finishAffinity(MainActivity.this);
+            }
+        });
+        mBuilder.setCancelable(false);
+        mAlertDialog = mBuilder.create();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (settingsFlag) {
+            settingsFlag = false;
+            checkPermissionNow();
+        }
+    }
+
 }

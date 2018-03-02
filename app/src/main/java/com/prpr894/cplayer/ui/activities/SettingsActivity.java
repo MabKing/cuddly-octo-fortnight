@@ -1,14 +1,21 @@
 package com.prpr894.cplayer.ui.activities;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.prpr894.cplayer.MyApp;
 import com.prpr894.cplayer.R;
 import com.prpr894.cplayer.base.BaseActivity;
 import com.prpr894.cplayer.utils.SPUtil;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import es.dmoral.toasty.MyToast;
 
 import static com.prpr894.cplayer.utils.AppConfig.EXIT_NOTIFICATION_DIALOG;
 import static com.prpr894.cplayer.utils.AppConfig.PLAY_TYPE;
@@ -50,6 +57,18 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
                 break;
             case PLAY_TYPE_SAO_ZI:
                 mRadioButtonJiaoZiPlayer.setChecked(true);
+                break;
+        }
+    }
+
+    @OnClick({R.id.tv_del_collection_backup, R.id.tv_collection_backup})
+    public void click(View view) {
+        switch (view.getId()) {
+            case R.id.tv_del_collection_backup:
+                MyToast.info("施工中...");
+                break;
+            case R.id.tv_collection_backup:
+                MyToast.info("施工中...");
                 break;
         }
     }
