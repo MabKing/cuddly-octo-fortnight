@@ -35,9 +35,9 @@ public class CollectionHelper implements View.OnClickListener, ColletionDeleteLi
 
     public void checkState(ImageView imageView) {
         if (checkBean()) {
-            mImageView.setImageResource(R.drawable.collection_true);
+            imageView.setImageResource(R.drawable.collection_true);
         } else {
-            mImageView.setImageResource(R.drawable.collection_false);
+            imageView.setImageResource(R.drawable.collection_false);
         }
     }
 
