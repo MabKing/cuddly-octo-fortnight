@@ -111,7 +111,13 @@ public class RoomRecyclerAdapter extends RecyclerView.Adapter<RoomRecyclerAdapte
     }
 
     public void removeAll() {
-        notifyDataSetChanged();
+        int i = mList.size();
+        if (i>0) {
+            for (int j = i-1; j >= 0; j--) {
+                mList.remove(j);
+                notifyItemRemoved(j);
+            }
+        }
     }
 
     @Override

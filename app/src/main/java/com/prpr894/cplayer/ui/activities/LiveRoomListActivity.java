@@ -90,6 +90,7 @@ public class LiveRoomListActivity extends BaseActivity implements RoomRecyclerAd
                             if (object.has("data")) {
                                 Gson gson = new Gson();
                                 List<LiveRoomItemDataBean> data = gson.fromJson(response.body(), LiveRoomListBean.class).getData();
+                                mAdapter.removeAll();
                                 mAdapter.addAll(data);
                             } else {
                                 MyToast.error("数据异常！");
