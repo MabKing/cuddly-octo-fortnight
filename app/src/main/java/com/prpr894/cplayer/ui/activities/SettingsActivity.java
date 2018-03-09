@@ -297,7 +297,7 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
                 }
                 builder.setCancelable(false);
                 builder.setTitle("警告");
-                builder.setMessage("清空数据不可恢复，确定清空收藏吗？");
+                builder.setMessage("清空数据不可恢复，确定清空收藏备份吗？");
                 builder.setPositiveButton("清空", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

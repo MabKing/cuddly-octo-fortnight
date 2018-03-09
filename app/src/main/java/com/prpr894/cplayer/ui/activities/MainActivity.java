@@ -17,12 +17,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.prpr894.cplayer.MyApp;
 import com.prpr894.cplayer.R;
 import com.prpr894.cplayer.base.BaseActivity;
+import com.prpr894.cplayer.greendao.gen.LiveRoomItemDataBeanDao;
 import com.prpr894.cplayer.ui.fragments.DownloadManagerFragment;
 import com.prpr894.cplayer.ui.fragments.LiveStationListFragment;
 import com.prpr894.cplayer.ui.fragments.LocalMusicFragment;
@@ -83,7 +85,54 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         //初始化一些东西
         mNavigationView.setCheckedItem(R.id.s_live);
         switchPage(0);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_settings:
+                        AlertDialog.Builder builder;
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+                            builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+                        } else {
+                            builder = new AlertDialog.Builder(MainActivity.this);
+                        }
+                        builder.setCancelable(false);
+                        builder.setTitle("警告");
+                        builder.setMessage("清空数据不可恢复，确定清空收藏吗？");
+                        builder.setPositiveButton("清空", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                LiveRoomItemDataBeanDao beanDao = MyApp.getInstance().getDaoSession().getLiveRoomItemDataBeanDao();
+                                beanDao.deleteAll();
+                                MyToast.successBig("清除成功");
+                            }
+                        });
+
+                        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        builder.create().show();
+                        break;
+                }
+                return true;
+            }
+        });
     }
+
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.collection, menu);
+        return true;
+    }
+
 
     /**
      * 切换fragment
