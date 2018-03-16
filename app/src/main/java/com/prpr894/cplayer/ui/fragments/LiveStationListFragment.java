@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -39,6 +40,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -94,6 +97,12 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
                 String url = "http://ww.jiafangmao.com/jk.txt";
                 String base = getStringFromNet(url);
                 if (!base.equals("")) {
+                    if (!base.startsWith("http://") && !base.startsWith("http://s")) {
+//                        WebView webView=new WebView(getContext());
+//                        webView.loadUrl(url);
+                        showBaiduSafeCheckDialog();
+                        return;
+                    }
                     SPUtil.putString(MyApp.getInstance(), "baseUrlFromServer", base);
                     String jsonListData = getStringFromNet(base + "/xyjk.html");
 //                    String jsonListData = getStringFromNet("http://ww.jiafangmao.com/6/xyjk.html");
@@ -140,6 +149,28 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
         }).start();
         mSmartRefreshLayout.finishRefresh();
         hideProgress();
+    }
+
+    private void showBaiduSafeCheckDialog() {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(getContext());
+        }
+        builder.setTitle("提示");
+        builder.setMessage("获取接口的网页地址貌似开启了百度云加速的浏览器安全验证，本程序暂未处理此问题，请稍后再试试看...");
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+            }
+        }, 3000);
     }
 
     private void showDialogNullBase() {
