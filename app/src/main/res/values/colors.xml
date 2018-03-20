@@ -15,4 +15,5 @@
     <color name="colorLoginBtn">#1365B9</color>
     <color name="colorFailed">#d81e06</color>
     <color name="transparent">#00000000</color>
+    <color name="colorOrange">#FF8811</color>
 </resources>

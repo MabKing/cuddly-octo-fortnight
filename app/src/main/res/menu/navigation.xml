@@ -5,23 +5,23 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/s_live"
-            android:icon="@drawable/ic_icon"
+            android:icon="@drawable/ic_live"
             android:title="直播"/>
         <item
             android:id="@+id/s_local_video"
-            android:icon="@drawable/ic_icon"
+            android:icon="@drawable/ic_video"
             android:title="本地视频"/>
         <item
             android:id="@+id/s_local_music"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_music"
             android:title="本地音频"/>
         <item
             android:id="@+id/s_search_music"
-            android:icon="@drawable/ic_icon"
+            android:icon="@drawable/ic_search"
             android:title="音乐搜索"/>
         <item
             android:id="@+id/s_download_manager"
-            android:icon="@drawable/ic_icon"
+            android:icon="@drawable/ic_download"
             android:title="下载管理"/>
 
     </group>
@@ -29,21 +29,21 @@
         <menu>
             <item
                 android:id="@+id/m_settings"
-                android:icon="@mipmap/ic_launcher"
+                android:icon="@drawable/ic_settings"
                 android:title="设置"/>
 
             <item
                 android:id="@+id/m_change_base"
-               android:icon="@mipmap/ic_launcher"
+               android:icon="@drawable/ic_yuan"
                 android:title="换源"/>
 
             <item
                 android:id="@+id/m_theme"
-                android:icon="@mipmap/ic_launcher"
+                android:icon="@drawable/ic_theme"
                 android:title="主题"/>
             <item
                 android:id="@+id/m_about"
-                android:icon="@mipmap/ic_launcher"
+                android:icon="@drawable/ic_about"
                 android:title="关于"/>
 
         </menu>
@@ -51,7 +51,7 @@
     <group android:id="@+id/g_2">
         <item
             android:id="@+id/m_exit_app"
-            android:icon="@drawable/ic_icon"
+            android:icon="@drawable/ic_exit"
             android:title="退出程序"/>
     </group>
 
