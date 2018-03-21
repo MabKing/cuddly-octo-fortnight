@@ -125,14 +125,26 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.collection, menu);
         return true;
     }
 
+    //刷新menu的选项
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (mCurrentFrg.getClass().getSimpleName().equals(MainPageLiveFragment.class.getSimpleName())) {
+            if (MainPageLiveFragment.getCurrentPage() == 1) {
+                menu.findItem(R.id.action_settings).setVisible(true);
+            } else {
+                menu.findItem(R.id.action_settings).setVisible(false);
+            }
+        } else {
+            menu.findItem(R.id.action_settings).setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     /**
      * 切换fragment
@@ -144,11 +156,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @SuppressLint("UseSparseArrays")
     public void switchPage(int key) {
-
         if (frgMap == null) {
             frgMap = new HashMap<>();
         }
-
+        //刷新menu
+        invalidateOptionsMenu();
         mShowFrg = frgMap.get(key);
         if (mShowFrg == null) {
             if (key == 0) {

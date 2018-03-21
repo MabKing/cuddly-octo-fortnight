@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -230,49 +231,6 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
         recyclerView.addItemDecoration(decoration);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(SettingsActivity.this));
-        adapter.setOnRecyclerItemClickListener(new CollectionBackupListRecyclerAdapter.OnRecyclerItemClickListener() {
-            @Override
-            public void onRecyclerItemClick(final int position, CollectionBackupItemDataBean data, View view) {
-                AlertDialog.Builder builder;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
-                    builder = new AlertDialog.Builder(SettingsActivity.this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
-                } else {
-                    builder = new AlertDialog.Builder(SettingsActivity.this);
-                }
-                builder.setCancelable(false);
-                builder.setTitle("提示");
-                builder.setMessage("请选择你想执行的操作");
-                builder.setPositiveButton("恢复备份", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        LiveRoomItemDataBeanDao dao = MyApp.getInstance().getDaoSession().getLiveRoomItemDataBeanDao();
-                        dao.deleteAll();
-                        dao.insertInTx(mCollectionBackupBean.getData().get(position).getData());
-                        dialog.dismiss();
-                        MyToast.successBig("恢复成功");
-                    }
-                });
-
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNeutralButton("删除", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        adapter.remove(position);
-                        Gson gson = new Gson();
-                        saveCollectionFile(gson.toJson(mCollectionBackupBean));
-                        dialog.dismiss();
-                        MyToast.successBig("删除成功");
-                    }
-                });
-
-                builder.create().show();
-            }
-        });
         builder.setView(view);
         builder.setPositiveButton("关闭", new DialogInterface.OnClickListener() {
             @Override
@@ -321,8 +279,54 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
                 builder.create().show();
             }
         });
-        builder.create().show();
+        final AlertDialog dialog = builder.create();
+        adapter.setOnRecyclerItemClickListener(new CollectionBackupListRecyclerAdapter.OnRecyclerItemClickListener() {
+            @Override
+            public void onRecyclerItemClick(final int position, CollectionBackupItemDataBean data, View view) {
+                dialog.dismiss();
+                AlertDialog.Builder builder;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    builder = new AlertDialog.Builder(SettingsActivity.this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(SettingsActivity.this);
+                }
+                builder.setCancelable(false);
+                builder.setTitle("提示");
+//                builder.setMessage("对于备份 " + data.getBackupDate() + "\n请选择你想执行的操作：");
+                builder.setMessage(Html.fromHtml("对于备份 <font color='#47C4FC'>"+data.getBackupDate() + "</font><br>请选择你想执行的操作："));
+                builder.setPositiveButton("恢复备份", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        LiveRoomItemDataBeanDao dao = MyApp.getInstance().getDaoSession().getLiveRoomItemDataBeanDao();
+                        dao.deleteAll();
+                        dao.insertInTx(mCollectionBackupBean.getData().get(position).getData());
+                        dialog.dismiss();
+                        MyToast.successBig("恢复成功");
+                    }
+                });
 
+
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNeutralButton("删除", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        adapter.remove(position);
+                        Gson gson = new Gson();
+                        saveCollectionFile(gson.toJson(mCollectionBackupBean));
+                        dialog.dismiss();
+                        MyToast.successBig("删除成功");
+                    }
+                });
+
+                builder.create().show();
+            }
+        });
+        dialog.show();
     }
 
 }
