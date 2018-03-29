@@ -265,7 +265,16 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("flag", "走了LiveStationListFragment onActivityResult");
-        onRefreshNow();
+//        Log.d("flag", "走了LiveStationListFragment onActivityResult");
+        switch (resultCode) {
+            case Activity.RESULT_CANCELED:
+                Log.d("flag", "走了MainActivity onActivityResult RESULT_CANCELED");
+                break;
+            case Activity.RESULT_OK:
+                if (requestCode == CHANGE_CODE) {
+                    onRefreshNow();
+                }
+                break;
+        }
     }
 }

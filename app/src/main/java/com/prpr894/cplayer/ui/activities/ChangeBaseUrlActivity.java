@@ -26,8 +26,9 @@ public class ChangeBaseUrlActivity extends BaseActivity implements ChangeBaseRec
     private String baseServer = "http://ww.jiafangmao.com/";//http://ww.jiafangmao.com/3
     private int page = 0;
     private ChangeBaseRecyclerAdapter mAdapter;
-
-    private int resultCode = Activity.RESULT_CANCELED;
+    private int cancel = 2333333;
+    private int ok = 666666;
+    private int resultCode = cancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,7 @@ public class ChangeBaseUrlActivity extends BaseActivity implements ChangeBaseRec
             public void onClick(DialogInterface dialog, int which) {
                 SPUtil.putBoolen(MyApp.getInstance(), "defaultBase", true);
                 mAdapter.toDefaultBaseUrl();
-                resultCode = Activity.RESULT_OK;
+                resultCode = ok;
                 getSubTitle().setVisibility(View.GONE);
                 dialog.dismiss();
             }
@@ -107,15 +108,20 @@ public class ChangeBaseUrlActivity extends BaseActivity implements ChangeBaseRec
         MyToast.successBig("已选择");
         SPUtil.putBoolen(MyApp.getInstance(), "defaultBase", false);
         SPUtil.putString(MyApp.getInstance(), "customBase", data);
-        resultCode = Activity.RESULT_OK;
+        resultCode = ok;
         mAdapter.refreshButton(view, position);
         refreshSubtitle();
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        setResult(resultCode);
+        if (resultCode == cancel) {
+            super.onBackPressed();
+            setResult(Activity.RESULT_CANCELED);
+        } else {
+            setResult(Activity.RESULT_OK);
+            finish();
+        }
     }
 
     @Override

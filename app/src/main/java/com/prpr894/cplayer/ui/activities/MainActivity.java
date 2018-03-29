@@ -416,15 +416,26 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("flag", "走了MainActivity onActivityResult");
-        if (mCurrentFrg.getClass().getSimpleName().equals(MainPageLiveFragment.class.getSimpleName())) {
-            if (MainPageLiveFragment.getCurrentPage() == 0) {
-                Log.d("flag", "走了MainActivity onActivityResult === MainPageLiveFragment.getCurrentPage() == 0");
-                LiveStationListFragment liveStationListFragment = ((MainPageLiveFragment) mCurrentFrg).getLiveStationListFragment();
-                if (liveStationListFragment != null) {
-                    liveStationListFragment.onRefreshNow();
+//        Log.d("flag", "走了MainActivity onActivityResult");
+        switch (resultCode) {
+            case RESULT_CANCELED:
+                Log.d("flag", "走了MainActivity onActivityResult RESULT_CANCELED");
+                break;
+            case RESULT_OK:
+                Log.d("flag", "requestCode: " + requestCode);
+                if (requestCode == LiveStationListFragment.CHANGE_CODE) {
+                    if (mCurrentFrg.getClass().getSimpleName().equals(MainPageLiveFragment.class.getSimpleName())) {
+                        if (MainPageLiveFragment.getCurrentPage() == 0) {
+                            Log.d("flag", "走了MainActivity onActivityResult === MainPageLiveFragment.getCurrentPage() == 0");
+                            LiveStationListFragment liveStationListFragment = ((MainPageLiveFragment) mCurrentFrg).getLiveStationListFragment();
+                            if (liveStationListFragment != null) {
+                                liveStationListFragment.onRefreshNow();
+                            }
+                        }
+                    }
                 }
-            }
+                Log.d("flag", "走了MainActivity onActivityResult RESULT_OK");
+                break;
         }
     }
 }
