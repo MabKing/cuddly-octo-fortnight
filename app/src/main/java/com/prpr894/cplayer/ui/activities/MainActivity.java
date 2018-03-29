@@ -2,6 +2,7 @@ package com.prpr894.cplayer.ui.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -208,7 +209,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case R.id.m_change_base:
                 Intent intentChangeBase = new Intent(this, ChangeBaseUrlActivity.class);
-                startActivity(intentChangeBase);
+                startActivityForResult(intentChangeBase, LiveStationListFragment.CHANGE_CODE);
                 mCustomDrawerLayout.closeDrawers();
                 break;
             case R.id.m_theme:
@@ -412,4 +413,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("flag", "走了MainActivity onActivityResult");
+        if (mCurrentFrg.getClass().getSimpleName().equals(MainPageLiveFragment.class.getSimpleName())) {
+            if (MainPageLiveFragment.getCurrentPage() == 0) {
+                Log.d("flag", "走了MainActivity onActivityResult === MainPageLiveFragment.getCurrentPage() == 0");
+                LiveStationListFragment liveStationListFragment = ((MainPageLiveFragment) mCurrentFrg).getLiveStationListFragment();
+                if (liveStationListFragment != null) {
+                    liveStationListFragment.onRefreshNow();
+                }
+            }
+        }
+    }
 }

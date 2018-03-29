@@ -22,6 +22,7 @@ import java.util.Objects;
 public class MainPageLiveFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
 
     private static ViewPager mViewPager;
+    private LiveStationListFragment mLiveStationListFragment;
 
     public MainPageLiveFragment() {
     }
@@ -36,7 +37,8 @@ public class MainPageLiveFragment extends BaseFragment implements ViewPager.OnPa
         TabLayout tabLayout = view.findViewById(R.id.tab);
         String[] title = {"直播", "收藏"};
         ViewPagerAdapter adapter = new ViewPagerAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), title);
-        adapter.addFragment(new LiveStationListFragment());
+        mLiveStationListFragment = new LiveStationListFragment();
+        adapter.addFragment(mLiveStationListFragment);
         adapter.addFragment(new CollectionsFragment());
         viewPager.setAdapter(adapter);
         //让ViewPager缓存2个页面
@@ -48,6 +50,10 @@ public class MainPageLiveFragment extends BaseFragment implements ViewPager.OnPa
 
     public static int getCurrentPage() {
         return mViewPager.getCurrentItem();
+    }
+
+    public LiveStationListFragment getLiveStationListFragment() {
+        return mLiveStationListFragment;
     }
 
     @Override

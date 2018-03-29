@@ -1,6 +1,7 @@
 package com.prpr894.cplayer.ui.fragments;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,6 +59,7 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
     private StationRecyclerAdapter mAdapter;
     private SmartRefreshLayout mSmartRefreshLayout;
     private boolean isRefresh = false;
+    public static final int CHANGE_CODE = 5;
 
     public LiveStationListFragment() {
         // Required empty public constructor
@@ -86,6 +88,12 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
     }
 
+    public void onRefreshNow() {
+//        isRefresh = false;
+//        initData();
+        mSmartRefreshLayout.autoRefresh();
+    }
+
     private void initData() {
         if (!isRefresh) {
             showProgress("加载中...", false);
@@ -95,6 +103,7 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
             public void run() {
                 String url = "http://ww.jiafangmao.com/jk.txt";
                 String base = getStringFromNet(url);
+//                base = "http://ww.jiafangmao.com/3";
                 if (!base.equals("")) {
                     if (!base.startsWith("http://") && !base.startsWith("http://s")) {
 //                        WebView webView=new WebView(getContext());
@@ -103,7 +112,13 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
                         return;
                     }
                     SPUtil.putString(MyApp.getInstance(), "baseUrlFromServer", base);
-                    String jsonListData = getStringFromNet(base + "/xyjk.html");
+                    String baseCurren;
+                    if (SPUtil.getBoolen(MyApp.getInstance(), "defaultBase", true)) {
+                        baseCurren = base;
+                    } else {
+                        baseCurren = SPUtil.getString(MyApp.getInstance(), "customBase", base);
+                    }
+                    String jsonListData = getStringFromNet(baseCurren + "/xyjk.html");
 //                    String jsonListData = getStringFromNet("http://ww.jiafangmao.com/6/xyjk.html");
                     Log.d("flag", "获取的json数据： \n" + jsonListData);
                     String jsonListDataFormated;
@@ -190,14 +205,18 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(getContext(), ChangeBaseUrlActivity.class);
-                LiveStationListFragment.this.startActivityForResult(intent, 1);
+                intentToChangeBaseActivity();
                 dialog.dismiss();
             }
         });
 
         builder.create().show();
 
+    }
+
+    public void intentToChangeBaseActivity() {
+        Intent intent = new Intent(getContext(), ChangeBaseUrlActivity.class);
+        LiveStationListFragment.this.startActivityForResult(intent, CHANGE_CODE);
     }
 
     private String getStringFromNet(String url) {
@@ -246,6 +265,7 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.d("flag", "走了LiveStationListFragment onActivityResult");
+        onRefreshNow();
     }
 }
