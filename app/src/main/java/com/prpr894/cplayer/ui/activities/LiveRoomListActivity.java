@@ -73,11 +73,12 @@ public class LiveRoomListActivity extends BaseActivity implements RoomRecyclerAd
         }
 
         String baseUrl;
-        if (SPUtil.getBoolen(MyApp.getInstance(), "useServerBase", true)) {
+        if (SPUtil.getBoolen(MyApp.getInstance(), "defaultBase", true)) {
             baseUrl = SPUtil.getString(MyApp.getInstance(), "baseUrlFromServer", "http://ww.jiafangmao.com/6");
         } else {
-            baseUrl = "http://ww.jiafangmao.com/6";
+            baseUrl = SPUtil.getString(MyApp.getInstance(), "customBase", "http://ww.jiafangmao.com/3");
         }
+        final String baseUrlStr = baseUrl;
         OkGo.<String>get(baseUrl + data.getUrl())
                 .execute(new StringCallback() {
                     @Override
@@ -104,6 +105,7 @@ public class LiveRoomListActivity extends BaseActivity implements RoomRecyclerAd
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        Log.d("flag", baseUrlStr + " code: " + response.code());
                         MyToast.error("网络连接异常！");
                         hideProgress();
                         mSmartRefreshLayout.finishRefresh();
