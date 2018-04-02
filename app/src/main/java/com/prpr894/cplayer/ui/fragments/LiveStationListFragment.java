@@ -105,10 +105,11 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
                 String base = getStringFromNet(url);
 //                base = "http://ww.jiafangmao.com/3";
                 if (!base.equals("")) {
-                    if (!base.startsWith("http://") && !base.startsWith("http://s")) {
+                    if (SPUtil.getBoolen(MyApp.getInstance(), "defaultBase", true) && !base.startsWith("http://") && !base.startsWith("http://s")) {
 //                        WebView webView=new WebView(getContext());
 //                        webView.loadUrl(url);
-                        showBaiduSafeCheckDialog();
+//                        showBaiduSafeCheckDialog();
+                        Log.d("flag", "获取base失败");
                         return;
                     }
                     SPUtil.putString(MyApp.getInstance(), "baseUrlFromServer", base);
