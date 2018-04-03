@@ -41,7 +41,7 @@ public class ChangeBaseUrlActivity extends BaseActivity implements ChangeBaseRec
 
     private void initData() {
         List<String> list = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 500; i++) {
             list.add(baseServer + i);
         }
         mAdapter = new ChangeBaseRecyclerAdapter(list, this);
