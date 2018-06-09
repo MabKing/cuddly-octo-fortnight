@@ -15,7 +15,6 @@ import com.baidu.cloud.videoplayer.demo.AdvancedPlayActivity;
 import com.prpr894.cplayer.MyApp;
 import com.prpr894.cplayer.R;
 import com.prpr894.cplayer.bean.LiveRoomItemDataBean;
-import com.prpr894.cplayer.bean.StationListItemDataBean;
 import com.prpr894.cplayer.ui.activities.MainPlayerActivity;
 import com.prpr894.cplayer.utils.CollectionHelper;
 import com.prpr894.cplayer.utils.SPUtil;
@@ -57,9 +56,9 @@ public class RoomRecyclerAdapter extends RecyclerView.Adapter<RoomRecyclerAdapte
         CollectionHelper collectionHelper = new CollectionHelper(holder.mImageViewCollection, mList.get(position));
         collectionHelper.checkState(holder.mImageViewCollection);
         holder.mImageViewCollection.setTag(collectionHelper);
-        holder.mTextViewStationName.setText(mList.get(position).getNickname());
+        holder.mTextViewStationName.setText(mList.get(position).getTitle());
         Picasso.with(mContext)
-                .load(mList.get(position).getLogourl())
+                .load(mList.get(position).getImg())
                 .placeholder(R.drawable.ic_img_loading)
                 .into(holder.mImageViewIcon);
     }
@@ -139,10 +138,9 @@ public class RoomRecyclerAdapter extends RecyclerView.Adapter<RoomRecyclerAdapte
     public void playNow(LiveRoomItemDataBean data) {
         Intent intent = initIntent();
         Bundle bundle = new Bundle();
-        bundle.putString("videoUrl", data.getPlay_url());
-        bundle.putString("imgUrl", data.getLogourl());
-        bundle.putString("title", data.getNickname());
-        bundle.putString("id", data.getUserid());
+        bundle.putString("videoUrl", data.getAddress());
+        bundle.putString("imgUrl", data.getImg());
+        bundle.putString("title", data.getTitle());
         intent.putExtras(bundle);
         mContext.startActivity(intent);
     }

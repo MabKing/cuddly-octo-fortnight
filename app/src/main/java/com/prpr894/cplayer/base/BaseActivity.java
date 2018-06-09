@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.prpr894.cplayer.R;
 
-import butterknife.ButterKnife;
 
 /**
  * Created by dell on 2018/1/2 0002.
@@ -23,7 +22,6 @@ public class BaseActivity extends AppCompatActivity implements BaseInterface {
 
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-        ButterKnife.bind(this);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         /** 初始化Toolbar*/
         mToolbar = findViewById(R.id.toolbar);

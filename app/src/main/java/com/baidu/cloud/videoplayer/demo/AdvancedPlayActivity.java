@@ -79,10 +79,9 @@ public class AdvancedPlayActivity extends BaseActivity implements IMediaPlayer.O
 
     private void initBundle() {
         mLiveRoomItemDataBean = new LiveRoomItemDataBean();
-        mLiveRoomItemDataBean.setLogourl(getIntent().getStringExtra("imgUrl"));
-        mLiveRoomItemDataBean.setNickname(getIntent().getStringExtra("title"));
-        mLiveRoomItemDataBean.setPlay_url(getIntent().getStringExtra("videoUrl"));
-        mLiveRoomItemDataBean.setUserid(getIntent().getStringExtra("id"));
+        mLiveRoomItemDataBean.setImg(getIntent().getStringExtra("imgUrl"));
+        mLiveRoomItemDataBean.setTitle(getIntent().getStringExtra("title"));
+        mLiveRoomItemDataBean.setAddress(getIntent().getStringExtra("videoUrl"));
     }
 
     /**
@@ -123,7 +122,7 @@ public class AdvancedPlayActivity extends BaseActivity implements IMediaPlayer.O
         mViewHolder.addView(mVV, rllp);
         mediaController.setMediaPlayerControl(mVV);
         mCollectionHelper=new CollectionHelper(mediaController.getCollectionView(),mLiveRoomItemDataBean);
-        mVV.setVideoPath(mLiveRoomItemDataBean.getPlay_url());
+        mVV.setVideoPath(mLiveRoomItemDataBean.getAddress());
         mVV.setLogEnabled(false);
 //        mVV.setDecodeMode(BDCloudMediaPlayer.DECODE_SW);
 
@@ -162,7 +161,7 @@ public class AdvancedPlayActivity extends BaseActivity implements IMediaPlayer.O
 
         });
         TextView tvTitle = this.findViewById(R.id.tv_top_title);
-        tvTitle.setText(mLiveRoomItemDataBean.getNickname());
+        tvTitle.setText(mLiveRoomItemDataBean.getTitle());
         final ImageButton ibScreen = this.findViewById(R.id.ibtn_screen_control);
         ibScreen.setOnClickListener(new OnClickListener() {
 

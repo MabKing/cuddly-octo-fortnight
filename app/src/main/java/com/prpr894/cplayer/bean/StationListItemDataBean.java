@@ -3,56 +3,56 @@ package com.prpr894.cplayer.bean;
 import java.io.Serializable;
 
 /**
- * "name":"娴瓙",
- * "img":"http://i1.mobile-dad.com/uploads/apk_img/201801/556763_1_151703117360af.png",
- * "url":"/live/langzi.html",
- * "fjs":"127"
+ * "title":"娴瓙",
+ * "xinimg":"http://i1.mobile-dad.com/uploads/apk_img/201801/556763_1_151703117360af.png",
+ * "address":"/live/langzi.html",
+ * "Number":"127"
  */
 public class StationListItemDataBean implements Serializable {
-    private String name;
-    private String img;
-    private String url;
-    private String fjs;
+    private String title;
+    private String xinimg;
+    private String address;
+    private String Number;
 
     @Override
     public String toString() {
         return "StationListItemDataBean{" +
-                "name='" + name + '\'' +
-                ", img='" + img + '\'' +
-                ", url='" + url + '\'' +
-                ", fjs='" + fjs + '\'' +
+                "title='" + title + '\'' +
+                ", xinimg='" + xinimg + '\'' +
+                ", address='" + address + '\'' +
+                ", Number='" + Number + '\'' +
                 '}';
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getImg() {
-        return img;
+    public String getXinimg() {
+        return xinimg;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setXinimg(String xinimg) {
+        this.xinimg = xinimg;
     }
 
-    public String getUrl() {
-        return url;
+    public String getAddress() {
+        return address;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getFjs() {
-        return fjs;
+    public String getNumber() {
+        return Number;
     }
 
-    public void setFjs(String fjs) {
-        this.fjs = fjs;
+    public void setNumber(String number) {
+        this.Number = number;
     }
 }

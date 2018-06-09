@@ -24,10 +24,9 @@ public class LiveRoomItemDataBeanDao extends AbstractDao<LiveRoomItemDataBean, S
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Userid = new Property(0, String.class, "userid", true, "USERID");
-        public final static Property Nickname = new Property(1, String.class, "nickname", false, "NICKNAME");
-        public final static Property Logourl = new Property(2, String.class, "logourl", false, "LOGOURL");
-        public final static Property Play_url = new Property(3, String.class, "play_url", false, "PLAY_URL");
+        public final static Property Address = new Property(0, String.class, "address", true, "ADDRESS");
+        public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
+        public final static Property Img = new Property(2, String.class, "img", false, "IMG");
     }
 
 
@@ -43,10 +42,9 @@ public class LiveRoomItemDataBeanDao extends AbstractDao<LiveRoomItemDataBean, S
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"LIVE_ROOM_ITEM_DATA_BEAN\" (" + //
-                "\"USERID\" TEXT PRIMARY KEY NOT NULL ," + // 0: userid
-                "\"NICKNAME\" TEXT," + // 1: nickname
-                "\"LOGOURL\" TEXT," + // 2: logourl
-                "\"PLAY_URL\" TEXT);"); // 3: play_url
+                "\"ADDRESS\" TEXT PRIMARY KEY NOT NULL ," + // 0: address
+                "\"TITLE\" TEXT," + // 1: title
+                "\"IMG\" TEXT);"); // 2: img
     }
 
     /** Drops the underlying database table. */
@@ -59,24 +57,19 @@ public class LiveRoomItemDataBeanDao extends AbstractDao<LiveRoomItemDataBean, S
     protected final void bindValues(DatabaseStatement stmt, LiveRoomItemDataBean entity) {
         stmt.clearBindings();
  
-        String userid = entity.getUserid();
-        if (userid != null) {
-            stmt.bindString(1, userid);
+        String address = entity.getAddress();
+        if (address != null) {
+            stmt.bindString(1, address);
         }
  
-        String nickname = entity.getNickname();
-        if (nickname != null) {
-            stmt.bindString(2, nickname);
+        String title = entity.getTitle();
+        if (title != null) {
+            stmt.bindString(2, title);
         }
  
-        String logourl = entity.getLogourl();
-        if (logourl != null) {
-            stmt.bindString(3, logourl);
-        }
- 
-        String play_url = entity.getPlay_url();
-        if (play_url != null) {
-            stmt.bindString(4, play_url);
+        String img = entity.getImg();
+        if (img != null) {
+            stmt.bindString(3, img);
         }
     }
 
@@ -84,24 +77,19 @@ public class LiveRoomItemDataBeanDao extends AbstractDao<LiveRoomItemDataBean, S
     protected final void bindValues(SQLiteStatement stmt, LiveRoomItemDataBean entity) {
         stmt.clearBindings();
  
-        String userid = entity.getUserid();
-        if (userid != null) {
-            stmt.bindString(1, userid);
+        String address = entity.getAddress();
+        if (address != null) {
+            stmt.bindString(1, address);
         }
  
-        String nickname = entity.getNickname();
-        if (nickname != null) {
-            stmt.bindString(2, nickname);
+        String title = entity.getTitle();
+        if (title != null) {
+            stmt.bindString(2, title);
         }
  
-        String logourl = entity.getLogourl();
-        if (logourl != null) {
-            stmt.bindString(3, logourl);
-        }
- 
-        String play_url = entity.getPlay_url();
-        if (play_url != null) {
-            stmt.bindString(4, play_url);
+        String img = entity.getImg();
+        if (img != null) {
+            stmt.bindString(3, img);
         }
     }
 
@@ -113,31 +101,29 @@ public class LiveRoomItemDataBeanDao extends AbstractDao<LiveRoomItemDataBean, S
     @Override
     public LiveRoomItemDataBean readEntity(Cursor cursor, int offset) {
         LiveRoomItemDataBean entity = new LiveRoomItemDataBean( //
-            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // userid
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // nickname
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // logourl
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // play_url
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // address
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // img
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, LiveRoomItemDataBean entity, int offset) {
-        entity.setUserid(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
-        entity.setNickname(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setLogourl(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setPlay_url(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setAddress(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setImg(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
      }
     
     @Override
     protected final String updateKeyAfterInsert(LiveRoomItemDataBean entity, long rowId) {
-        return entity.getUserid();
+        return entity.getAddress();
     }
     
     @Override
     public String getKey(LiveRoomItemDataBean entity) {
         if(entity != null) {
-            return entity.getUserid();
+            return entity.getAddress();
         } else {
             return null;
         }
@@ -145,7 +131,7 @@ public class LiveRoomItemDataBeanDao extends AbstractDao<LiveRoomItemDataBean, S
 
     @Override
     public boolean hasKey(LiveRoomItemDataBean entity) {
-        return entity.getUserid() != null;
+        return entity.getAddress() != null;
     }
 
     @Override

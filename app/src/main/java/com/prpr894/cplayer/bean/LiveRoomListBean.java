@@ -3,14 +3,14 @@ package com.prpr894.cplayer.bean;
 import java.util.List;
 
 public class LiveRoomListBean {
-    private List<LiveRoomItemDataBean> data;
+    private List<LiveRoomItemDataBean> zhubo;
 
-    public List<LiveRoomItemDataBean> getData() {
-        return data;
+    public List<LiveRoomItemDataBean> getZhubo() {
+        return zhubo;
     }
 
-    public void setData(List<LiveRoomItemDataBean> data) {
-        this.data = data;
+    public void setZhubo(List<LiveRoomItemDataBean> zhubo) {
+        this.zhubo = zhubo;
     }
 
 }

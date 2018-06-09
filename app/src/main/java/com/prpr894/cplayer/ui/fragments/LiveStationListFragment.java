@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import com.lzy.okgo.utils.IOUtils;
 import com.prpr894.cplayer.MyApp;
 import com.prpr894.cplayer.R;
@@ -32,10 +31,6 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,124 +96,37 @@ public class LiveStationListFragment extends BaseFragment implements OnRefreshLi
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String url = "http://ww.jiafangmao.com/jk.txt";
-                String base = getStringFromNet(url);
-//                base = "http://ww.jiafangmao.com/3";
-                if (!base.equals("")) {
-                    if (SPUtil.getBoolen(MyApp.getInstance(), "defaultBase", true) && !base.startsWith("http://") && !base.startsWith("http://s")) {
-//                        WebView webView=new WebView(getContext());
-//                        webView.loadUrl(url);
-//                        showBaiduSafeCheckDialog();
-                        Log.d("flag", "获取base失败");
-                        return;
-                    }
-                    SPUtil.putString(MyApp.getInstance(), "baseUrlFromServer", base);
-                    String baseCurren;
-                    if (SPUtil.getBoolen(MyApp.getInstance(), "defaultBase", true)) {
-                        baseCurren = base;
-                    } else {
-                        baseCurren = SPUtil.getString(MyApp.getInstance(), "customBase", base);
-                    }
-                    String jsonListData = getStringFromNet(baseCurren + "/xyjk.html");
-//                    String jsonListData = getStringFromNet("http://ww.jiafangmao.com/6/xyjk.html");
-                    Log.d("flag", "获取的json数据： \n" + jsonListData);
-                    String jsonListDataFormated;
-                    if (jsonListData.contains(",]")) {
-                        Log.d("flag", "走了格式化");
-                        jsonListDataFormated = jsonListData.replace(",]", "]");
-                    } else {
-                        jsonListDataFormated = jsonListData;
-                    }
-                    try {
-                        JSONObject object = new JSONObject(jsonListDataFormated);
-                        if (object.has("data")) {
-                            Gson gson = new Gson();
-                            JsonReader reader = new JsonReader(new StringReader(jsonListDataFormated));
-                            reader.setLenient(true);
-                            StationBean bean = gson.fromJson(reader, StationBean.class);
-                            final List<StationListItemDataBean> data = bean.getData();
-                            Log.d("flag", "获取的json数据的长度为： " + data.size());
-                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mList.clear();
-                                    mAdapter.removeAll();
-                                    mAdapter.addAll(data);
-                                }
-                            });
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    mSmartRefreshLayout.finishRefresh();
-                    hideProgress();
-                } else {//base为空
-                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showDialogNullBase();
-                        }
-                    });
+                String base = "http://api.hclyz.cn:81/mf/";
+                SPUtil.putString(MyApp.getInstance(), "baseUrlFromServer", base);
+                String baseCurren;
+                if (SPUtil.getBoolen(MyApp.getInstance(), "defaultBase", true)) {
+                    baseCurren = base;
+                } else {
+                    baseCurren = SPUtil.getString(MyApp.getInstance(), "customBase", base);
                 }
+                String jsonListData = getStringFromNet(baseCurren + "json.txt");
+                Log.d("flag", "获取的json数据： \n" + jsonListData);
+                Gson gson = new Gson();
+                StationBean bean = gson.fromJson(jsonListData, StationBean.class);
+                final List<StationListItemDataBean> data = bean.getPingtai();
+                Log.d("flag", "获取的json数据的长度为： " + data.size());
+                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mList.clear();
+                        mAdapter.removeAll();
+                        mAdapter.addAll(data);
+                    }
+                });
+                mSmartRefreshLayout.finishRefresh();
+                hideProgress();
+
             }
         }).start();
         mSmartRefreshLayout.finishRefresh();
         hideProgress();
     }
 
-    private void showBaiduSafeCheckDialog() {
-        AlertDialog.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
-        } else {
-            builder = new AlertDialog.Builder(getContext());
-        }
-        builder.setTitle("提示");
-        builder.setMessage("获取接口的网页地址貌似开启了百度云加速的浏览器安全验证，本程序暂未处理此问题，请稍后再试试看...");
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (dialog.isShowing()) {
-                    dialog.dismiss();
-                }
-            }
-        }, 3000);
-    }
-
-    private void showDialogNullBase() {
-        AlertDialog.Builder builder;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
-            builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
-        } else {
-            builder = new AlertDialog.Builder(getContext());
-        }
-        builder.setTitle("提示");
-        builder.setMessage("获取服务器地址失败。是否尝试本地源服务器地址？");
-        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                intentToChangeBaseActivity();
-                dialog.dismiss();
-            }
-        });
-
-        builder.create().show();
-
-    }
-
-    public void intentToChangeBaseActivity() {
-        Intent intent = new Intent(getContext(), ChangeBaseUrlActivity.class);
-        LiveStationListFragment.this.startActivityForResult(intent, CHANGE_CODE);
-    }
 
     private String getStringFromNet(String url) {
         OkHttpClient client = new OkHttpClient();

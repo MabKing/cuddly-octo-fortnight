@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.prpr894.cplayer.MyApp;
@@ -33,7 +34,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.OnClick;
 import es.dmoral.toasty.MyToast;
 
 import static com.prpr894.cplayer.utils.AppConfig.EXIT_NOTIFICATION_DIALOG;
@@ -41,10 +41,12 @@ import static com.prpr894.cplayer.utils.AppConfig.PLAY_TYPE;
 import static com.prpr894.cplayer.utils.AppConfig.PLAY_TYPE_BAI_DU;
 import static com.prpr894.cplayer.utils.AppConfig.PLAY_TYPE_SAO_ZI;
 
-public class SettingsActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
+public class SettingsActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private RadioButton mRadioButtonBaiduPlayer, mRadioButtonJiaoZiPlayer;
     private CheckBox mCheckBoxExitDialog;
+    private TextView mTextViewBackRead;
+    private TextView mTextViewBackSave;
 
     String filePath = Environment.getExternalStorageDirectory().toString() + File.separator + "CPlayer/Collection/collections.json";
     File file;
@@ -78,6 +80,10 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
         mRadioButtonBaiduPlayer.setOnCheckedChangeListener(this);
         mRadioButtonJiaoZiPlayer.setOnCheckedChangeListener(this);
         mCheckBoxExitDialog.setOnCheckedChangeListener(this);
+        mTextViewBackRead=findViewById(R.id.tv_collection_backup_read);
+        mTextViewBackRead.setOnClickListener(this);
+        mTextViewBackSave=findViewById(R.id.tv_collection_backup_save);
+        mTextViewBackSave.setOnClickListener(this);
         initSettings();
     }
 
@@ -93,18 +99,6 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
                 break;
             case PLAY_TYPE_SAO_ZI:
                 mRadioButtonJiaoZiPlayer.setChecked(true);
-                break;
-        }
-    }
-
-    @OnClick({R.id.tv_collection_backup_read, R.id.tv_collection_backup_save})
-    public void click(View view) {
-        switch (view.getId()) {
-            case R.id.tv_collection_backup_read:
-                readCollectionDialog();
-                break;
-            case R.id.tv_collection_backup_save:
-                saveCollectionDialog();
                 break;
         }
     }
@@ -329,4 +323,15 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
         dialog.show();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_collection_backup_read:
+                readCollectionDialog();
+                break;
+            case R.id.tv_collection_backup_save:
+                saveCollectionDialog();
+                break;
+        }
+    }
 }

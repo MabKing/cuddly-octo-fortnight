@@ -1,65 +1,57 @@
 package com.prpr894.cplayer.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
  * "userid":"396577",
- * "nickname":"火车轮流开",
- * "logourl":"http://xiansamu.com/api/public/upload/avatar/20180225/1519558044_avatar.jpg",
- * "play_url":"rtmp://pull.xiansamu.com/5showmic/396577_1519808324"
+ * "title":"火车轮流开",
+ * "img":"http://xiansamu.com/api/public/upload/avatar/20180225/1519558044_avatar.jpg",
+ * "address":"rtmp://pull.xiansamu.com/5showmic/396577_1519808324"
  */
 @Entity
 public class LiveRoomItemDataBean {
-    @Id
-    private String userid;
-    private String nickname;
-    private String logourl;
-    private String play_url;
 
-    @Generated(hash = 949875384)
-    public LiveRoomItemDataBean(String userid, String nickname, String logourl,
-            String play_url) {
-        this.userid = userid;
-        this.nickname = nickname;
-        this.logourl = logourl;
-        this.play_url = play_url;
+    @Id
+    private String address;
+    private String title;
+    private String img;
+
+
+    @Generated(hash = 412868379)
+    public LiveRoomItemDataBean(String address, String title, String img) {
+        this.address = address;
+        this.title = title;
+        this.img = img;
     }
 
     @Generated(hash = 1615497048)
     public LiveRoomItemDataBean() {
     }
 
-    public String getUserid() {
-        return userid;
+
+    public String getTitle() {
+        return title;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getImg() {
+        return img;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setImg(String img) {
+        this.img = img;
     }
 
-    public String getLogourl() {
-        return logourl;
+    public String getAddress() {
+        return address;
     }
 
-    public void setLogourl(String logourl) {
-        this.logourl = logourl;
-    }
-
-    public String getPlay_url() {
-        return play_url;
-    }
-
-    public void setPlay_url(String play_url) {
-        this.play_url = play_url;
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

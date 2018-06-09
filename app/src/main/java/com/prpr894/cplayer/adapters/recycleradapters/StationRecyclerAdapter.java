@@ -41,10 +41,10 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mTextViewStationName.setText(mList.get(position).getName());
-        holder.mTextViewNum.setText(mList.get(position).getFjs());
+        holder.mTextViewStationName.setText(mList.get(position).getTitle());
+        holder.mTextViewNum.setText(mList.get(position).getNumber());
         Picasso.with(mContext)
-                .load(mList.get(position).getImg())
+                .load(mList.get(position).getXinimg())
                 .placeholder(R.drawable.ic_img_loading)
                 .into(holder.mImageViewIcon);
 

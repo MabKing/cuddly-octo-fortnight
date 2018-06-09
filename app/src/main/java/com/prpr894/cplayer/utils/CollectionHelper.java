@@ -47,7 +47,7 @@ public class CollectionHelper implements View.OnClickListener, ColletionDeleteLi
             return false;
         }
         for (int i = 0; i < beans.size(); i++) {
-            if (beans.get(i).getUserid().equals(mBean.getUserid())) {
+            if (beans.get(i).getAddress().equals(mBean.getAddress())) {
                 return true;
             }
         }
@@ -56,14 +56,14 @@ public class CollectionHelper implements View.OnClickListener, ColletionDeleteLi
 
     private void changeCollectionState() {
         if (checkBean()) {
-            Log.d("flag", "执行了删除 " + mBean.getNickname());
+            Log.d("flag", "执行了删除 " + mBean.getTitle());
             mBeanDao.delete(mBean);
             ListenerManager.getInstance().sendBroadCast(mBean);
-            MyToast.successBig("成功删除：\n" + mBean.getNickname());
+            MyToast.successBig("成功删除：\n" + mBean.getTitle());
         } else {
-            Log.d("flag", "执行了收藏 " + mBean.getNickname());
+            Log.d("flag", "执行了收藏 " + mBean.getTitle());
             mBeanDao.insert(mBean);
-            MyToast.successBig("成功收藏：\n" + mBean.getNickname());
+            MyToast.successBig("成功收藏：\n" + mBean.getTitle());
         }
         checkState(mImageView);
     }
